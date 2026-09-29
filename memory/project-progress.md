@@ -1,5 +1,14 @@
 # Project progress and development record
 
+## Project baseline pushed to main - 2026-09-29
+
+User clarified that the current files should go directly to main before a PR. Completed that request: main on https://github.com/KhoaKhoa811/code-visualization now contains baseline commit 40d4d36 (111 tracked project/instruction/source/contract/specification files). Initial commit c30d3e4 is its parent. Generated tools, builds and results are ignored; .gitattributes preserves exact source bytes. The earlier plan to review the entire baseline in a PR is superseded by this explicit direct-main request.
+
+Created docs/repository-handoff from the published main for the follow-up PR, containing the final publication notes in both memory files. That PR reviews these notes, not baseline code already on main. Opened [PR #1](https://github.com/KhoaKhoa811/code-visualization/pull/1) from docs/repository-handoff to main. The PR is open and has not been merged. The previous chore/project-baseline branch also points to the baseline commit; it contains no extra code beyond main.
+
+Git author is configured locally as KhoaKhoa811 / KhoaKhoa811@users.noreply.github.com. AGENTS.md records the standing task-branch push/PR workflow; merging PRs and starting the loop implementation still require separate approval. Existing contract/runtime verification records remain unchanged; no new Docker tests ran for repository setup.
+
+
 ## Git baseline preparation - 2026-09-29
 
 Remote confirmed by user: https://github.com/KhoaKhoa811/code-visualization.git. Remote inspection returned no branches. User approved repository-local author KhoaKhoa811 / KhoaKhoa811@users.noreply.github.com. Created empty main root commit c30d3e4 and branch chore/project-baseline so the first PR can show the whole project. Added .gitignore for generated/local files and .gitattributes to preserve exact source bytes used by contract hashes. Publication is in progress; no push or PR success is claimed in this entry. Earlier missing-destination/author notes are superseded.
