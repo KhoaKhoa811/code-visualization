@@ -1,0 +1,20 @@
+{
+  "runId": "fixture-loop-output-only",
+  "sourceId": "4617228feefe4b3daf5a2325cfbc468c7a3737570d7a5ced7dc12542c5cd05ab",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "unavailable",
+  "diagnostics": [
+    {
+      "category": "visualization_limitation",
+      "message": "Illustrative output-only selection; no loop producer is implemented.",
+      "source": null
+    }
+  ],
+  "events": null,
+  "safePlaybackBoundary": null,
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

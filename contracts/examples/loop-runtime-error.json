@@ -1,0 +1,140 @@
+{
+  "runId": "fixture-loop-runtime-error",
+  "sourceId": "382b0f4d62d8c785698dc0a6fb5526f4c1df86d308aa8539b1588e73cd83e295",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "failed",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "runtime_error",
+      "message": "Illustrative array index failure; not captured runtime evidence.",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 26
+        }
+      }
+    },
+    {
+      "category": "visualization_limitation",
+      "message": "Only the illustrated safe prefix is available.",
+      "source": null
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 18
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "x",
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 9
+        },
+        "end": {
+          "line": 4,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-2",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 5
+        },
+        {
+          "type": "int",
+          "value": 2
+        },
+        {
+          "type": "int",
+          "value": 7
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 14
+        },
+        "end": {
+          "line": 5,
+          "column": 24
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "variableId": "variable-3",
+      "variableName": "i",
+      "value": {
+        "type": "int",
+        "value": -1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 26
+        },
+        "end": {
+          "line": 5,
+          "column": 43
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 4,
+    "lastSafeEventSequence": 4
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

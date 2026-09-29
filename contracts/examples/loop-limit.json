@@ -1,0 +1,301 @@
+{
+  "runId": "fixture-loop-limit",
+  "sourceId": "4617228feefe4b3daf5a2325cfbc468c7a3737570d7a5ced7dc12542c5cd05ab",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "limited",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "trace_limit",
+      "message": "Illustrative recording budget reached before the final condition.",
+      "source": null
+    },
+    {
+      "category": "visualization_limitation",
+      "message": "Only the illustrated safe prefix is available.",
+      "source": null
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 18
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "x",
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 9
+        },
+        "end": {
+          "line": 4,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-2",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 5
+        },
+        {
+          "type": "int",
+          "value": 2
+        },
+        {
+          "type": "int",
+          "value": 7
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 14
+        },
+        "end": {
+          "line": 5,
+          "column": 23
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "variableId": "variable-3",
+      "variableName": "i",
+      "value": {
+        "type": "int",
+        "value": 0
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 5,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 26
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 6,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 44
+        },
+        "end": {
+          "line": 5,
+          "column": 47
+        }
+      },
+      "variableId": "variable-3",
+      "value": {
+        "type": "int",
+        "value": 1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 7,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 8,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 26
+        }
+      },
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 9,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 44
+        },
+        "end": {
+          "line": 5,
+          "column": 47
+        }
+      },
+      "variableId": "variable-3",
+      "value": {
+        "type": "int",
+        "value": 2
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 10,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 11,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 26
+        }
+      },
+      "arrayId": "array-1",
+      "index": 2,
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 12,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 44
+        },
+        "end": {
+          "line": 5,
+          "column": 47
+        }
+      },
+      "variableId": "variable-3",
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 12,
+    "lastSafeEventSequence": 12
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

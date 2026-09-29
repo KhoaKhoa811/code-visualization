@@ -1,0 +1,27 @@
+$ErrorActionPreference = 'Stop'
+& node (Join-Path $PSScriptRoot '../../contracts/validate.mjs') --self-test
+if ($LASTEXITCODE -ne 0) { throw 'Trace contract self-tests failed' }
+# This generates fresh fixtures in the bounded worker; no stale artifact fallback.
+$fixtures = Join-Path $PSScriptRoot ('.results/fixtures-' + [Guid]::NewGuid().ToString('N'))
+& (Join-Path $PSScriptRoot 'test.ps1') -FixtureDirectory $fixtures
+$prototype = Join-Path $PSScriptRoot '../prototype'
+$build = Join-Path $PSScriptRoot 'target/runner-tests'
+New-Item -ItemType Directory -Force -Path $build | Out-Null
+$trusted = @('RunnerHarness.java','ExecEvidence.java','TracePipe.java','ArrayTrace.java','ArrayTraceTest.java','ArrayRecordingTest.java') |
+    ForEach-Object { Join-Path $prototype $_ }
+$trusted += Join-Path $PSScriptRoot 'AutomaticRecordingTest.java'
+$trusted += Join-Path $PSScriptRoot 'FixtureBundleTest.java'
+& javac --release 21 -encoding UTF-8 -d $build @trusted
+if ($LASTEXITCODE -ne 0) { throw 'Trusted runner driver compilation failed' }
+& java -cp $build ArrayTraceTest
+if ($LASTEXITCODE -ne 0) { throw 'Shared collector regression failed' }
+& java -cp $build FixtureBundleTest (Join-Path $PSScriptRoot '.results')
+if ($LASTEXITCODE -ne 0) { throw 'Fixture batch validation failed' }
+& java -cp $build AutomaticRecordingTest $PSScriptRoot $fixtures
+if ($LASTEXITCODE -ne 0) { throw 'Automatic recording comparison failed' }
+& node (Join-Path $PSScriptRoot 'check-recordings.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Automatic trace contract/reconstruction failed' }
+& java -cp $build ArrayRecordingTest $prototype
+if ($LASTEXITCODE -ne 0) { throw 'Manual recording regression failed' }
+& node (Join-Path $prototype 'recording/check-results.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Manual trace contract/reconstruction failed' }

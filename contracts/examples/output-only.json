@@ -1,0 +1,30 @@
+{
+  "runId": "run-output-only-1",
+  "sourceId": "source-output-only-1",
+  "schemaVersion": "draft-1",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "unavailable",
+  "diagnostics": [
+    {
+      "category": "visualization_limitation",
+      "message": "This fixture assumes tracing for Math.abs(int) is unavailable. The admitted original program runs without instrumentation.",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 28
+        },
+        "end": {
+          "line": 3,
+          "column": 40
+        }
+      }
+    }
+  ],
+  "events": null,
+  "safePlaybackBoundary": null,
+  "console": {
+    "stdout": "3\n",
+    "stderr": ""
+  }
+}

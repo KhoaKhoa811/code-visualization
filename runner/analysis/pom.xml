@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>dev.codeviz</groupId>
+  <artifactId>array-analysis-prototype</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputTimestamp>2026-09-22T00:00:00Z</project.build.outputTimestamp>
+    <javaparser.version>3.28.2</javaparser.version>
+    <!-- Tests deliberately run only through test.ps1 inside Docker. -->
+    <skipTests>true</skipTests>
+  </properties>
+  <dependencyManagement><dependencies>
+    <dependency><groupId>org.javassist</groupId><artifactId>javassist</artifactId><version>3.31.0-GA</version></dependency>
+    <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>33.6.0-jre</version></dependency>
+    <dependency><groupId>com.google.guava</groupId><artifactId>failureaccess</artifactId><version>1.0.3</version></dependency>
+    <dependency><groupId>com.google.guava</groupId><artifactId>listenablefuture</artifactId><version>9999.0-empty-to-avoid-conflict-with-guava</version></dependency>
+    <dependency><groupId>org.jspecify</groupId><artifactId>jspecify</artifactId><version>1.0.0</version></dependency>
+    <dependency><groupId>com.google.errorprone</groupId><artifactId>error_prone_annotations</artifactId><version>2.47.0</version></dependency>
+    <dependency><groupId>com.google.j2objc</groupId><artifactId>j2objc-annotations</artifactId><version>3.1</version></dependency>
+    <dependency><groupId>org.checkerframework</groupId><artifactId>checker-qual</artifactId><version>3.55.1</version></dependency>
+  </dependencies></dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.javaparser</groupId><artifactId>javaparser-core</artifactId><version>${javaparser.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.javaparser</groupId><artifactId>javaparser-symbol-solver-core</artifactId><version>${javaparser.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>array-analysis</finalName>
+    <resources>
+      <resource><directory>../prototype/recording</directory><targetPath>recorder</targetPath><includes><include>Recorder.java</include></includes></resource>
+    </resources>
+    <testResources>
+      <testResource><directory>../prototype/recording/original</directory><targetPath>fixtures</targetPath><includes><include>Main.java</include></includes></testResource>
+    </testResources>
+    <plugins>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-clean-plugin</artifactId><version>3.4.1</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-resources-plugin</artifactId><version>3.3.1</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.14.1</version><configuration><proc>none</proc></configuration></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.4</version><configuration><skipTests>true</skipTests></configuration></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-jar-plugin</artifactId><version>3.4.2</version><configuration><forceCreation>true</forceCreation></configuration></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-dependency-plugin</artifactId><version>3.8.1</version></plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId><artifactId>maven-shade-plugin</artifactId><version>3.6.1</version>
+        <executions><execution><phase>package</phase><goals><goal>shade</goal></goals><configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <transformers><transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"><mainClass>dev.codeviz.analysis.AnalyzerMain</mainClass></transformer></transformers>
+        </configuration></execution></executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

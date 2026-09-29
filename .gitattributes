@@ -1,0 +1,3 @@
+# Preserve exact source bytes and mixed historical line endings.
+# Contract source fixtures use SHA-256 over their checked-in bytes.
+* -text

@@ -1,0 +1,73 @@
+{
+  "runId": "run-partial-visualization-1",
+  "sourceId": "source-partial-visualization-1",
+  "schemaVersion": "draft-1",
+  "executionOutcome": "limited",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "trace_limit",
+      "message": "Illustrative recording limit: only steps 1 and 2 are safe to replay. Execution was terminated under the run limit policy; later array state is not known.",
+      "source": null
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 31
+        }
+      },
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 3
+        },
+        {
+          "type": "int",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 9
+        },
+        "end": {
+          "line": 4,
+          "column": 22
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 7
+      }
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 2,
+    "lastSafeEventSequence": 2
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

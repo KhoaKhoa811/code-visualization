@@ -1,0 +1,108 @@
+{
+  "runId": "fixture-loop-zero",
+  "sourceId": "8092c11bf8e68b3d33ff00a902bb9a30c5e73a12136c9c41b09bf8ffa374b71a",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "complete",
+  "diagnostics": [],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 18
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "x",
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 9
+        },
+        "end": {
+          "line": 4,
+          "column": 26
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-2",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 14
+        },
+        "end": {
+          "line": 5,
+          "column": 23
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "variableId": "variable-3",
+      "variableName": "i",
+      "value": {
+        "type": "int",
+        "value": 0
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": false
+      },
+      "exitedVariableIds": [
+        "variable-3"
+      ]
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 4,
+    "lastSafeEventSequence": 4
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

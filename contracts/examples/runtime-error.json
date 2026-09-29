@@ -1,0 +1,62 @@
+{
+  "runId": "run-runtime-error-1",
+  "sourceId": "source-runtime-error-1",
+  "schemaVersion": "draft-1",
+  "executionOutcome": "failed",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "runtime_error",
+      "message": "ArrayIndexOutOfBoundsException: index 5 is outside the recorded array of length 2.",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 17
+        },
+        "end": {
+          "line": 4,
+          "column": 26
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 31
+        }
+      },
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 3
+        },
+        {
+          "type": "int",
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 1,
+    "lastSafeEventSequence": 1
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

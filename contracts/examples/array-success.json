@@ -1,0 +1,88 @@
+{
+  "runId": "run-array-success-1",
+  "sourceId": "source-array-success-1",
+  "schemaVersion": "draft-1",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "complete",
+  "diagnostics": [],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 31
+        }
+      },
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 3
+        },
+        {
+          "type": "int",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 21
+        },
+        "end": {
+          "line": 4,
+          "column": 30
+        }
+      },
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 1
+      }
+    },
+    {
+      "sequence": 3,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 9
+        },
+        "end": {
+          "line": 4,
+          "column": 30
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 1
+      }
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 3,
+    "lastSafeEventSequence": 3
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

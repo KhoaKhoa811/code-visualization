@@ -1,0 +1,22 @@
+# Local build tools, generated output and test evidence
+**/.tools/
+**/target/
+**/.build/
+**/.results/
+**/node_modules/
+**/dist/
+*.class
+
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

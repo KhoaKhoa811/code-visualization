@@ -1,0 +1,7 @@
+**
+!Dockerfile
+!target/
+target/*
+!target/array-analysis.jar
+!target/test-classes/
+!target/test-classes/**

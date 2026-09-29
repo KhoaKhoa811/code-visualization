@@ -1,0 +1,11 @@
+# Resolved runtime dependency baseline, 2026-09-22. Reproduce with maven.ps1 dependency:tree.
+com.github.javaparser:javaparser-core:3.28.2
+com.github.javaparser:javaparser-symbol-solver-core:3.28.2
+org.javassist:javassist:3.31.0-GA
+com.google.guava:guava:33.6.0-jre
+com.google.guava:failureaccess:1.0.3
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+org.jspecify:jspecify:1.0.0
+com.google.errorprone:error_prone_annotations:2.47.0
+com.google.j2objc:j2objc-annotations:3.1
+org.checkerframework:checker-qual:3.55.1

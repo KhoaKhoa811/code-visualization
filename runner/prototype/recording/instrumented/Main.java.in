@@ -1,0 +1,15 @@
+public class Main {
+    public static void main(String[] args) throws Exception {
+        @BEFORE_OPEN@
+        Recorder.begin(@LIMIT@);
+        int[] values = {@FIRST@, @SECOND@};
+        Recorder.declare(values, @DECLARE_SOURCE@);
+        @AFTER_DECLARE@
+        Recorder.write(values, @TARGET@,
+            Recorder.read(values, @INDEX@, @READ_SOURCE@), @WRITE_SOURCE@);
+        // Same development probe as the original; no extra recorded steps.
+        System.out.print("FINAL=" + values[0] + "," + values[1]);
+        System.err.print("PROBE");
+        Recorder.end();
+    }
+}
