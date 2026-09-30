@@ -1,6 +1,6 @@
 # Draft Contract Validation
 
-2026-09-29: [run-result-v3.schema.json](run-result-v3.schema.json) and the validator implement the approved draft-3 contract for boolean conditions and atomic loop-scope exit. See [the first loop specification](../specs/for-loop-array-recording.md) and [ADR 0007](../specs/decisions/0007-loop-condition-and-scope-draft-3.md). This is contract validation only; no Java loop producer or plan-aware loop collector is implemented. Draft-1/draft-2 schemas and their four checked-in fixtures are byte-for-byte unchanged.
+2026-09-29: [run-result-v3.schema.json](run-result-v3.schema.json) and the validator implement the approved draft-3 contract for boolean conditions and atomic loop-scope exit. See [the first loop specification](../specs/for-loop-array-recording.md) and [ADR 0007](../specs/decisions/0007-loop-condition-and-scope-draft-3.md). That task covered contract validation only. The subsequent [runtime implementation](../runner/analysis/LOOP_RECORDING.md) now produces and validates real loop traces; its 68 loop cases passed on 2026-09-30. The six checked-in draft-3 examples remain designed contract fixtures, not runtime captures. Draft-1/draft-2 schemas and their four checked-in fixtures are byte-for-byte unchanged.
 
 ## Draft-3 scope and verification
 

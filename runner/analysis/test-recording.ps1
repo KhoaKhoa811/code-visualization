@@ -7,16 +7,26 @@ $fixtures = Join-Path $PSScriptRoot ('.results/fixtures-' + [Guid]::NewGuid().To
 $prototype = Join-Path $PSScriptRoot '../prototype'
 $build = Join-Path $PSScriptRoot 'target/runner-tests'
 New-Item -ItemType Directory -Force -Path $build | Out-Null
-$trusted = @('RunnerHarness.java','ExecEvidence.java','TracePipe.java','ArrayTrace.java','ArrayTraceTest.java','ArrayRecordingTest.java') |
+$trusted = @('RunnerHarness.java','ExecEvidence.java','TracePipe.java','ArrayTrace.java','LoopTracePlan.java','LoopTraceTest.java','ArrayTraceTest.java','ArrayRecordingTest.java') |
     ForEach-Object { Join-Path $prototype $_ }
 $trusted += Join-Path $PSScriptRoot 'AutomaticRecordingTest.java'
 $trusted += Join-Path $PSScriptRoot 'FixtureBundleTest.java'
+$trusted += Join-Path $PSScriptRoot 'LoopRecordingTest.java'
+$trusted += Join-Path $PSScriptRoot 'LoopFixtureBundleTest.java'
 & javac --release 21 -encoding UTF-8 -d $build @trusted
 if ($LASTEXITCODE -ne 0) { throw 'Trusted runner driver compilation failed' }
 & java -cp $build ArrayTraceTest
 if ($LASTEXITCODE -ne 0) { throw 'Shared collector regression failed' }
+& java -cp $build LoopTraceTest
+if ($LASTEXITCODE -ne 0) { throw 'Loop collector checks failed' }
 & java -cp $build FixtureBundleTest (Join-Path $PSScriptRoot '.results')
 if ($LASTEXITCODE -ne 0) { throw 'Fixture batch validation failed' }
+& java -cp $build LoopFixtureBundleTest (Join-Path $PSScriptRoot '.results')
+if ($LASTEXITCODE -ne 0) { throw 'Loop fixture batch validation failed' }
+& java -cp $build LoopRecordingTest $PSScriptRoot $fixtures
+if ($LASTEXITCODE -ne 0) { throw 'Loop recording comparison failed' }
+& node (Join-Path $PSScriptRoot 'check-loops.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Loop trace contract/reconstruction failed' }
 & java -cp $build AutomaticRecordingTest $PSScriptRoot $fixtures
 if ($LASTEXITCODE -ne 0) { throw 'Automatic recording comparison failed' }
 & node (Join-Path $PSScriptRoot 'check-recordings.mjs')

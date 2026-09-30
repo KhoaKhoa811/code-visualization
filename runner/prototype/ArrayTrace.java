@@ -29,6 +29,12 @@ final class ArrayTrace {
     private int bytes;
     private boolean ended, eof, sealed;
     private String problem = "";
+    private LoopTracePlan loop;
+
+    ArrayTrace(LoopTracePlan loop) {
+        this(Map.of(), "");
+        this.loop = Objects.requireNonNull(loop);
+    }
 
     ArrayTrace(Map<String, String> sources) { this(sources, "values"); }
     ArrayTrace(Map<String, String> sources, String variableName) {
@@ -62,7 +68,7 @@ final class ArrayTrace {
         this.nameJson = quote(variableName);
         this.arrayNameJson = arrayName == null ? nameJson : quote(arrayName);
     }
-    private static String quote(String variableName) {
+    static String quote(String variableName) {
         StringBuilder name = new StringBuilder("\"");
         for (char c : variableName.toCharArray()) {
             if (c == '"' || c == '\\') name.append('\\').append(c);
@@ -95,12 +101,18 @@ final class ArrayTrace {
 
     private void record(String record) {
         if (record.equals("{\"transport\":\"end\"}")) {
+            if (loop != null && !loop.complete()) { fail(Failure.INVALID, "Premature loop completion"); return; }
             if (combined && events.size() != operationOrder.size()) { fail(Failure.INVALID, "Premature combined completion"); return; }
             ended = true; return;
         }
         if (record.equals("{\"transport\":\"limit\"}")) { fail(Failure.LIMIT, "Recorder event/byte/array limit"); return; }
         if (events.size() >= EVENT_LIMIT) { fail(Failure.LIMIT, "Collector event limit"); return; }
         try {
+            if (loop != null) {
+                loop.accept(record, events.size() + 1);
+                events.add(record);
+                return;
+            }
             Matcher event = EVENT.matcher(record);
             if (!event.matches() || integer(event.group(1)) != events.size() + 1) {
                 throw new IllegalArgumentException("Malformed event or sequence gap");

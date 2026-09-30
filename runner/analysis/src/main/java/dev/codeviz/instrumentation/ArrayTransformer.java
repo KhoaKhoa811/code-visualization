@@ -23,11 +23,12 @@ public final class ArrayTransformer {
         if (eventLimit < 1 || eventLimit > 32) return rejected("EVENT_LIMIT", analysis);
         if (!analysis.eligible() || (analysis.completeness() != ArrayAnalyzer.Completeness.COMPLETE_FOR_ARRAY_PROBE
             && analysis.completeness() != ArrayAnalyzer.Completeness.COMPLETE_FOR_INT_PROBE
-            && analysis.completeness() != ArrayAnalyzer.Completeness.COMPLETE_FOR_COMBINED_PROBE))
+            && analysis.completeness() != ArrayAnalyzer.Completeness.COMPLETE_FOR_COMBINED_PROBE
+            && analysis.completeness() != ArrayAnalyzer.Completeness.COMPLETE_FOR_LOOP_PROBE))
             return rejected("INELIGIBLE_ANALYSIS", analysis);
         try { analysis.source().requireSame(original); }
         catch (IllegalArgumentException e) { return rejected("STALE_SOURCE", analysis); }
-        try { return generate(analysis, eventLimit); }
+        try { return analysis.sites().kind() == ArrayAnalyzer.ProbeKind.LOOP ? LoopTransformer.generate(analysis, original, eventLimit) : generate(analysis, eventLimit); }
         catch (StackOverflowError e) { return rejected("TRANSFORMATION_LIMIT", analysis); }
         catch (Exception e) { return rejected("TRANSFORMATION_FAILURE:" + e.getClass().getSimpleName(), analysis); }
     }
