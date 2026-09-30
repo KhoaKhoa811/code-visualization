@@ -8,7 +8,9 @@ Fresh full gate `runner/analysis/test-recording.ps1` completed with exit 0: 68 l
 
 Evidence: runner/analysis/.results/loop-gate-20260930-1.out.log, .err.log (empty), .exit.txt (0); fresh fixtures in .results/fixtures-23f8f7919e6e455eacfaccbc4bdec223. Four batch sizes: 998854/759159/495442/495368 bytes, each below one MiB. Every runtime/worker cleanup was verified; final Docker label queries found no analysis/prototype containers. Changed documentation paths/fences, PowerShell syntax and staged whitespace checks passed. The September 29 interrupted attempt is not a passed gate.
 
-Updated the loop implementation guide, Java/trace specifications, ADR 0007 and related guides. Milestone 1 remains incomplete: this is a bounded prototype without frontend/browser playback, sorting or general loop support. Later V1 requirements remain intact. Next action in this approved task is committing/pushing the reviewed branch and opening its PR; publication is not yet claimed here. Do not merge or start another feature without confirmation.
+Updated the loop implementation guide, Java/trace specifications, ADR 0007 and related guides. Published implementation commit 79ed082 on feat/classic-for-recording and opened [PR #2](https://github.com/KhoaKhoa811/code-visualization/pull/2) against main. The PR is open, not merged. The branch includes the two earlier publication-note commits from PR #1 because it began at that handoff tip. These final publication notes are committed/pushed as a documentation follow-up on the same PR.
+
+Milestone 1 remains incomplete: this is a bounded prototype without frontend/browser playback, sorting or general loop support. Later V1 requirements remain intact. The approved loop task is complete; next discuss and obtain confirmation for the next bounded increment. Do not merge or start another feature without confirmation.
 
 ## Loop implementation recovery - 2026-09-30
 
