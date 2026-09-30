@@ -1,4 +1,6 @@
-param([string]$FixtureDirectory)
+param([string]$FixtureDirectory,
+    [ValidateSet('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','deadline-probe','output-probe')]
+    [string[]]$Modes = @('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','deadline-probe','output-probe'))
 $ErrorActionPreference = 'Stop'
 $resultsDir = Join-Path $PSScriptRoot '.results'
 New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
@@ -75,7 +77,7 @@ $build = Invoke-Docker @('build', '--pull=false', '--network=none', '--platform=
 $imageId = (Get-Content -LiteralPath $imageFile -Raw).Trim()
 if ($imageId -notmatch '^sha256:[a-f0-9]{64}$') { throw 'Invalid built image identity' }
 
-foreach ($mode in @('acceptance', 'acceptance-addition', 'deadline-probe', 'output-probe')) {
+foreach ($mode in $Modes) {
     $name = "codeviz-analysis-$runId-$mode"
     try {
         $create = @('create', '--pull=never', '--platform=linux/amd64', "--name=$name", "--label=codeviz.analysis=$runId",
@@ -93,22 +95,24 @@ foreach ($mode in @('acceptance', 'acceptance-addition', 'deadline-probe', 'outp
             $config.HostConfig.NanoCpus -ne 1000000000 -or $config.HostConfig.CapDrop -notcontains 'ALL' -or
             $config.HostConfig.SecurityOpt -notcontains 'no-new-privileges=true' -or
             @($config.Mounts | Where-Object { $_.Type -eq 'bind' }).Count -ne 0) { throw 'Unexpected worker isolation configuration' }
-        if ($mode -in @('acceptance', 'acceptance-addition')) {
+        if ($mode.StartsWith('acceptance')) {
             $output = Invoke-Docker @('start', '--attach', $containerId) 60
             $state = (Invoke-Docker @('inspect', $containerId) | ConvertFrom-Json)[0].State
-            $marker = if ($mode -eq 'acceptance') { 'PASS: 18 analyzer cases' } else { 'PASS: 62 indexed-update fixtures' }
+            $isLoop = $mode.StartsWith('acceptance-loop-')
+            $marker = if ($isLoop) { 'PASS: 34 loop-' } elseif ($mode -eq 'acceptance') { 'PASS: 18 analyzer cases' } else { 'PASS: 62 indexed-update fixtures' }
             if ($state.Running -or $state.ExitCode -ne 0 -or $state.OOMKilled -or $output -notmatch $marker) { throw 'No confirmed successful test completion' }
             $output | Set-Content -LiteralPath (Join-Path $resultsDir "$mode.txt") -Encoding UTF8
             $parts = $output -split 'REPORT_BEGIN\r?\n', 2
             if ($mode -eq 'acceptance' -and $parts.Count -ne 2) { throw 'Missing bounded analysis report' }
             $lines = $parts[0] -split '\r?\n'
-            $artifacts = @($lines | Where-Object { $_.StartsWith('ARTIFACT ') })
-            $expectedCount = if ($mode -eq 'acceptance') { 88 } else { 62 }
-            $batch = if ($mode -eq 'acceptance') { 'batch-0.txt' } else { 'batch-1.txt' }
+            $artifactPrefix = if ($isLoop) { 'LOOP_ARTIFACT ' } else { 'ARTIFACT ' }
+            $artifacts = @($lines | Where-Object { $_.StartsWith($artifactPrefix) })
+            $expectedCount = if ($isLoop) { 34 } elseif ($mode -eq 'acceptance') { 88 } else { 62 }
+            $batch = if ($isLoop) { $mode.Substring(11) + '.txt' } elseif ($mode -eq 'acceptance') { 'batch-0.txt' } else { 'batch-1.txt' }
             if ($artifacts.Count -ne $expectedCount) { throw 'Missing automatic transformation fixtures' }
             [IO.File]::WriteAllLines((Join-Path $FixtureDirectory $batch), $artifacts, (New-Object Text.UTF8Encoding $false))
             if ((Get-Item -LiteralPath (Join-Path $FixtureDirectory $batch)).Length -gt 1048576) { throw 'Fixture batch exceeds cap' }
-            Write-Output ($lines | Where-Object { -not $_.StartsWith('ARTIFACT ') })
+            Write-Output ($lines | Where-Object { -not $_.StartsWith($artifactPrefix) })
             if ($mode -eq 'acceptance') { $parts[1] | Set-Content -LiteralPath (Join-Path $resultsDir 'original-analysis.txt') -Encoding UTF8 }
         } else {
             $expected = if ($mode -eq 'deadline-probe') { 'TIMEOUT' } else { 'OUTPUT_LIMIT' }
@@ -126,5 +130,5 @@ foreach ($mode in @('acceptance', 'acceptance-addition', 'deadline-probe', 'outp
         Write-Output "PASS removed $name"
     }
 }
-Write-Output 'PASS analyzer suite and two driver limit probes; every owned container removed'
+Write-Output "PASS selected analyzer worker modes ($($Modes -join ', ')); every owned container removed"
 Write-Output "Fresh bounded fixture batches: $FixtureDirectory"

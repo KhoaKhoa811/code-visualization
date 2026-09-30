@@ -1,5 +1,7 @@
 # Automatic array recording
 
+The [classic for-loop extension](LOOP_RECORDING.md) adds 68 loop cases and draft-3 condition/scope recording alongside the 150 legacy cases. Its guide records current verification and limitations; dated counts below describe earlier increments.
+
 The subsequent [standalone increment extension](INDEX_INCREMENT_RECORDING.md) adds i++ and ++i. Its expanded gate passed 150 cases/124 comparisons on 2026-09-28, plus result/replay and shared/manual checks. Counts and dated evidence below describe the earlier baseline.
 
 Subsequent increments added [integer recording](INTEGER_RECORDING.md), [combined scalar/array recording](COMBINED_RECORDING.md), [variable-index recording](VARIABLE_INDEX_RECORDING.md), [index-update recording](INDEX_UPDATE_RECORDING.md) and [index-addition recording](INDEX_ADDITION_RECORDING.md). The same gate now generates 110 fixtures and compares 92 original/generated pairs. The nine original array cases and their draft-1 contract remain unchanged. The original array-only evidence below is historical; current results are recorded in memory.

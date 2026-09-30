@@ -1,8 +1,8 @@
 # First classic for-loop recording
 
-2026-09-29 contract update: user approved draft-3 schema, illustrative fixtures and validator work. [The contract guide](../contracts/README.md) records passing legacy checks, six new fixtures, 44 negative cases, twelve partial prefixes and fixture source/cursor checks. Draft-1/draft-2 schemas and original fixtures are unchanged. No Java loop implementation or Docker tests were performed. Earlier specification-only status below is historical; runtime implementation still requires approval.
+2026-09-30 implementation update: the user approved the bounded runtime implementation. [The implementation guide](../runner/analysis/LOOP_RECORDING.md) describes dedicated loop facts, guarded lowering, draft-3 recording, phase-aware collection and prefix replay. All 68 loop runtime cases/40 original-generated comparisons and 68 result/replay checks passed, including 34 prefix/postfix pairs. The full gate exited 0, retaining all 150 legacy cases/124 comparisons and seven manual cases/four comparisons, with verified cleanup. Earlier specification-only and pending-approval statements below are historical.
 
-Status: scope specified on 2026-09-28; machine-readable contract work approved and verified on 2026-09-29. Runtime loop implementation and Docker tests require separate approval. The last verified Java runtime baseline remains 150 automatic cases/124 comparisons. The existing [loop-step rules](java-support.md#approved-loop-step-rules) remain authoritative.
+Status: scope specified on 2026-09-28; machine-readable contract verified on 2026-09-29; bounded loop implementation and loop runtime/replay checks verified on 2026-09-30. Draft-1/draft-2 schemas and original fixtures are unchanged. The existing [loop-step rules](java-support.md#approved-loop-step-rules) remain authoritative.
 
 ## 1. Bounded source shape
 
@@ -62,7 +62,7 @@ The index declaration executes once, not once per iteration. Each condition, bod
 
 ## 3. Draft-3 contract and scope handling
 
-Draft-2 has a closed event union, int-only values and no scope-exit representation. Do not encode a condition as an integer assignment or silently extend draft-2. Use draft-3 as described in [ADR 0007](decisions/0007-loop-condition-and-scope-draft-3.md). Machine-readable schema/fixtures and validator changes passed the contract gate on 2026-09-29; a loop producer is not implemented yet.
+Draft-2 has a closed event union, int-only values and no scope-exit representation. Do not encode a condition as an integer assignment or silently extend draft-2. Use draft-3 as described in [ADR 0007](decisions/0007-loop-condition-and-scope-draft-3.md). Machine-readable schema/fixtures and validator changes passed the contract gate on 2026-09-29; the bounded loop producer was added in the subsequent approved implementation.
 
 Keep the result envelope, source identity, terminal outcomes and console rules. Draft-1/draft-2 producers and consumers retain their current behavior. For draft-3:
 
@@ -79,7 +79,7 @@ On failure/limit/cancellation, playback ends at the last accepted operation snap
 
 ## 4. Analysis and instrumentation boundaries
 
-The current analyzer recognizes fixed statement shapes. Its scope builder models blocks/methods, and enclosingScope deliberately returns no scope for an unmodeled ForStmt. Introduce explicit facts for the eligible for scope rather than mislabeling i as a main-block variable or weakening the guard for all unmodeled constructs.
+The original analyzer recognized fixed statement shapes and deliberately returned no enclosing scope across unmodeled ForStmt boundaries. The loop increment now models a ForStmt scope for the candidate main-body shape, validates exact eligibility separately and preserves unknown-scope guards for other unmodeled constructs. The index is not labeled as a main-block variable.
 
 Add a dedicated loop analysis result composed from the existing source, declaration, binding, access and increment facts. It must include all six operation spans; the for/header/body boundaries; main/loop scope relationship; resolved scalar/array/index identities and types; the less-than operator; the length receiver and its array type; and the chosen increment operator/operand. The array-length receiver must be the declared int[] and length must be its built-in int length, not an arbitrary similarly named field or method. Reject stale, absent, swapped or inconsistent facts before transformation. Do not overload the existing fixed scalarWrite/storeIndex fields with ambiguous loop meanings.
 
@@ -140,4 +140,4 @@ Capture native Java/Node output explicitly in future test logs: the last PowerSh
 
 The September 28 specification task reviewed requirements, stepping decisions, implementation boundaries and Java 21 references and changed documentation only. On September 29, the approved contract task added draft-3 schema/fixtures and validator checks. All contract checks passed; no Java/Docker tests ran and no runtime-loop code changed.
 
-The contract gate is complete. Recommended next task, requiring confirmation: implement the bounded analyzer/transformer/recorder/collector/replay path and run Docker acceptance/regression checks for this loop scope. Milestone 1 and frontend/browser playback remain incomplete; sorting, broader loop forms and later V1 requirements remain planned.
+The later approved implementation is described in the status above and the implementation guide. Milestone 1 and frontend/browser playback remain incomplete; sorting, broader loop forms and later V1 requirements remain planned. Completing this increment does not authorize the next feature or merging its PR.

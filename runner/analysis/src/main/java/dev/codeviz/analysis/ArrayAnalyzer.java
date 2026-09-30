@@ -17,8 +17,8 @@ import java.util.*;
 public final class ArrayAnalyzer {
     public static final int MAX_NODES = 4096, MAX_DIAGNOSTICS = 16;
     public enum Category { SYNTAX, UNRESOLVED, UNTESTED, ENTRY_CONVENTION, INPUT, LIMIT, TOOL_FAILURE }
-    public enum Completeness { COMPLETE_FOR_ARRAY_PROBE, COMPLETE_FOR_INT_PROBE, COMPLETE_FOR_COMBINED_PROBE, PARTIAL, UNAVAILABLE }
-    public enum ProbeKind { ARRAY, INT_VARIABLE, COMBINED }
+    public enum Completeness { COMPLETE_FOR_ARRAY_PROBE, COMPLETE_FOR_INT_PROBE, COMPLETE_FOR_COMBINED_PROBE, COMPLETE_FOR_LOOP_PROBE, PARTIAL, UNAVAILABLE }
+    public enum ProbeKind { ARRAY, INT_VARIABLE, COMBINED, LOOP }
     public record Diagnostic(Category category, String message, SourceSnapshot.Span span) {}
     public record Scope(String id, String parentId, String kind, SourceSnapshot.Span span) {}
     public record Binding(String id, String name, String type, String scopeId, SourceSnapshot.Span span) {}
@@ -31,7 +31,12 @@ public final class ArrayAnalyzer {
                                  String bindingId, String operator, String resultType) {}
     public record Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write,
                         String bindingId, ProbeKind kind, SourceSnapshot.Span arrayDeclaration, String arrayBindingId,
-                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment) {
+                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment, LoopProbe.Facts loop) {
+        public Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write, String bindingId, ProbeKind kind,
+                     SourceSnapshot.Span arrayDeclaration, String arrayBindingId, SourceSnapshot.Span scalarReference,
+                     SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment) {
+            this(declaration, read, write, bindingId, kind, arrayDeclaration, arrayBindingId, scalarReference, scalarWrite, scalarWriteBindingId, index, addition, increment, null);
+        }
         public Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write, String bindingId, ProbeKind kind,
                      SourceSnapshot.Span arrayDeclaration, String arrayBindingId, SourceSnapshot.Span scalarReference,
                      SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition) {
@@ -126,7 +131,8 @@ public final class ArrayAnalyzer {
         Map<Node, String> scopeIds = new IdentityHashMap<>();
         List<Scope> scopes = new ArrayList<>();
         for (Node node : nodes) {
-            if (node instanceof CompilationUnit || node instanceof TypeDeclaration<?> || node instanceof MethodDeclaration || node instanceof BlockStmt) {
+            if (node instanceof CompilationUnit || node instanceof TypeDeclaration<?> || node instanceof MethodDeclaration || node instanceof BlockStmt
+                || (node instanceof ForStmt && loopCandidate(node))) {
                 SourceSnapshot.Span span = span(source, node);
                 String id = "scope:" + node.getClass().getSimpleName() + ":" + span.startOffset();
                 String parent = enclosingScope(node, scopeIds);
@@ -185,7 +191,8 @@ public final class ArrayAnalyzer {
         if (sites == null) diagnostics.add(Category.UNTESTED, "Source is outside the reviewed int/array probe shapes; Java validity is not determined", null);
         Completeness complete = diagnostics.values.isEmpty()
             ? sites.kind() == ProbeKind.ARRAY ? Completeness.COMPLETE_FOR_ARRAY_PROBE
-                : sites.kind() == ProbeKind.COMBINED ? Completeness.COMPLETE_FOR_COMBINED_PROBE : Completeness.COMPLETE_FOR_INT_PROBE
+                : sites.kind() == ProbeKind.COMBINED ? Completeness.COMPLETE_FOR_COMBINED_PROBE
+                : sites.kind() == ProbeKind.LOOP ? Completeness.COMPLETE_FOR_LOOP_PROBE : Completeness.COMPLETE_FOR_INT_PROBE
             : Completeness.PARTIAL;
         return new Result(source, unit, bindings, scopes, accesses, diagnostics.values, entry,
             diagnostics.values.isEmpty() ? sites : null, complete);
@@ -221,6 +228,8 @@ public final class ArrayAnalyzer {
         if (!method.getAnnotations().isEmpty() || !method.getTypeParameters().isEmpty()
             || method.getModifiers().size() != 2 || !method.getParameter(0).getAnnotations().isEmpty()) return null;
         NodeList<Statement> statements = method.getBody().orElseThrow().getStatements();
+        if ((statements.size() == 3 || statements.size() == 5) && statements.get(2).isForStmt())
+            return LoopProbe.sites(source, statements, bindings, targets);
         if (statements.size() >= 3 && statements.size() <= 7 && statements.get(1).isExpressionStmt()
             && statements.get(1).asExpressionStmt().getExpression().isVariableDeclarationExpr())
             return CombinedProbe.sites(source, statements, bindings, targets, diagnostics);
@@ -276,6 +285,11 @@ public final class ArrayAnalyzer {
             parent = parent.getParentNode().orElse(null);
         }
         return null;
+    }
+    private static boolean loopCandidate(Node node) {
+        if (!(node.getParentNode().orElse(null) instanceof BlockStmt block)
+            || !(block.getParentNode().orElse(null) instanceof MethodDeclaration)) return false;
+        return (block.getStatements().size() == 3 || block.getStatements().size() == 5) && block.getStatement(2) == node;
     }
     private static SourceSnapshot.Span span(SourceSnapshot source, Node node) {
         return source.span(node.getRange().orElseThrow());

@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 $buildDir = Join-Path $PSScriptRoot '.build'
 New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 # Compile ONLY trusted driver/test files on the host. Fixture Main.java files stay in Docker.
-$trustedFiles = @('RunnerHarness.java','ExecEvidence.java','RunnerFailureTest.java','RunnerHarnessTest.java','ArrayTrace.java','TracePipe.java','ArrayTraceTest.java','ArrayRecordingTest.java') | ForEach-Object { Join-Path $PSScriptRoot $_ }
+$trustedFiles = @('RunnerHarness.java','ExecEvidence.java','RunnerFailureTest.java','RunnerHarnessTest.java','ArrayTrace.java','LoopTracePlan.java','TracePipe.java','ArrayTraceTest.java','ArrayRecordingTest.java') | ForEach-Object { Join-Path $PSScriptRoot $_ }
 & javac --release 21 -encoding UTF-8 -d $buildDir @trustedFiles
 if ($LASTEXITCODE -ne 0) { throw 'Trusted harness compilation failed' }
 & java -cp $buildDir RunnerFailureTest
