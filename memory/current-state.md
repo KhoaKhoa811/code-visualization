@@ -6,7 +6,9 @@ User approved review and a design-only proposal after asking whether the actual 
 
 Created proposed specs/loop-array-read-proposal.md and ADR 0008 on docs/loop-array-read-proposal. Recommend natural array-declaration + loop source, with body values[i] = values[i] + signed-int-literal, i++ or ++i. Propose separate RHS read and whole-assignment write steps, grouping addition with the write. Example {5,2,7} plus 1 has fifteen steps and ends [6,3,8]; normal false retires the index. Explicit plan identities keep this two-declaration shape separate from the existing scalar-fill variant. No schema change anticipated, subject to contract tests. Java evaluation/overflow references reviewed; runtime acceptance cases are proposed, not run.
 
-These are proposals awaiting user confirmation, not newly supported code. No runtime, schema, fixture or application files changed; no Java/Docker tests ran. The verified baseline remains the 218 automatic cases/164 comparisons from the prior task. Complete documentation checks and the standing commit/push/PR delivery, then ask for confirmation of stepping/source scope before implementation. PR #2 remains the previous implementation PR; do not merge it automatically.
+These are proposals awaiting user confirmation, not newly supported code. No runtime, schema, fixture or application files changed; no Java/Docker tests ran. The verified baseline remains the 218 automatic cases/164 comparisons from the prior task. Documentation paths/fences, the fifteen-step table and Git whitespace checks passed. Published design commit 605a48e and opened [PR #3](https://github.com/KhoaKhoa811/code-visualization/pull/3) against main; final publication notes follow on the same branch.
+
+Delivery update 2026-10-01: remote inspection showed PR #2 already merged and its feature branch deleted. Fetched origin/main (4588659), verified it includes f1eee95 and that this proposal differs by only four documentation/memory files. No merge was performed by this task. PR #3 is open; confirm the proposed stepping/source scope before implementation, and obtain separate approval before merging.
 
 ## Bounded classic for-loop verified - 2026-09-30
 
