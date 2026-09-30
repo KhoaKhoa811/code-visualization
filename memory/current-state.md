@@ -1,5 +1,13 @@
 # Session handoff
 
+## Loop array-read design review - 2026-09-30
+
+User approved review and a design-only proposal after asking whether the actual app exists. Clarified that the engine prototype performs real analysis/instrumentation/Docker execution/replay, while the React UI and Spring Boot app are not built. Reviewed requirements, current loop facts/lowering/recorder/collector/replay, draft-3 schema and semantic validator. Draft-3 already represents ARRAY_READ; the specialized loop collector and reducer currently do not consume it.
+
+Created proposed specs/loop-array-read-proposal.md and ADR 0008 on docs/loop-array-read-proposal. Recommend natural array-declaration + loop source, with body values[i] = values[i] + signed-int-literal, i++ or ++i. Propose separate RHS read and whole-assignment write steps, grouping addition with the write. Example {5,2,7} plus 1 has fifteen steps and ends [6,3,8]; normal false retires the index. Explicit plan identities keep this two-declaration shape separate from the existing scalar-fill variant. No schema change anticipated, subject to contract tests. Java evaluation/overflow references reviewed; runtime acceptance cases are proposed, not run.
+
+These are proposals awaiting user confirmation, not newly supported code. No runtime, schema, fixture or application files changed; no Java/Docker tests ran. The verified baseline remains the 218 automatic cases/164 comparisons from the prior task. Complete documentation checks and the standing commit/push/PR delivery, then ask for confirmation of stepping/source scope before implementation. PR #2 remains the previous implementation PR; do not merge it automatically.
+
 ## Bounded classic for-loop verified - 2026-09-30
 
 Completed the approved implementation on feat/classic-for-recording. LoopProbe supplies dedicated immutable binding/type/scope/site facts; LoopTransformer validates the exact-source handoff and lowers one classic for into guarded native operations. Loop-only helper members share the existing recorder transport, emit draft-3 conditions and retire the index atomically on final false. LoopTracePlan validates repeated condition/store/update phases; the prototype reducer reconstructs forward/backward prefixes from recorded values. Both i++ and ++i are supported for the specified single-array-store loop. Legacy recorder source, schemas and checked-in fixtures remain unchanged.
