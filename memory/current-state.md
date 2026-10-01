@@ -1,5 +1,11 @@
 # Session handoff
 
+## Interrupted push recovered - 2026-10-01
+
+Read both memories, the design proposal/ADR and Git state at the user's request. The proposal commit 605a48e was already remote; only documentation commit b56e6e7 (both memory files) remained local. Verified PR #3 was open/unmerged, checked the pending commit for whitespace errors, and successfully pushed b56e6e7 to docs/loop-array-read-proposal. No implementation code was missing or changed, and no runtime tests were needed or run. This recovery note follows on the same PR.
+
+Current decision remains pending: confirm the proposed ARRAY_READ then ARRAY_WRITE stepping for values[i] = values[i] + literal before implementation. The prototype baseline and prior test evidence remain unchanged. Do not merge PR #3 or start implementation without confirmation.
+
 ## Loop array-read design review - 2026-09-30
 
 User approved review and a design-only proposal after asking whether the actual app exists. Clarified that the engine prototype performs real analysis/instrumentation/Docker execution/replay, while the React UI and Spring Boot app are not built. Reviewed requirements, current loop facts/lowering/recorder/collector/replay, draft-3 schema and semantic validator. Draft-3 already represents ARRAY_READ; the specialized loop collector and reducer currently do not consume it.
