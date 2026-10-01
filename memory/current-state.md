@@ -1,5 +1,21 @@
 # Session handoff
 
+## Interrupted push recovered - 2026-10-01
+
+Read both memories, the design proposal/ADR and Git state at the user's request. The proposal commit 605a48e was already remote; only documentation commit b56e6e7 (both memory files) remained local. Verified PR #3 was open/unmerged, checked the pending commit for whitespace errors, and successfully pushed b56e6e7 to docs/loop-array-read-proposal. No implementation code was missing or changed, and no runtime tests were needed or run. This recovery note follows on the same PR.
+
+Current decision remains pending: confirm the proposed ARRAY_READ then ARRAY_WRITE stepping for values[i] = values[i] + literal before implementation. The prototype baseline and prior test evidence remain unchanged. Do not merge PR #3 or start implementation without confirmation.
+
+## Loop array-read design review - 2026-09-30
+
+User approved review and a design-only proposal after asking whether the actual app exists. Clarified that the engine prototype performs real analysis/instrumentation/Docker execution/replay, while the React UI and Spring Boot app are not built. Reviewed requirements, current loop facts/lowering/recorder/collector/replay, draft-3 schema and semantic validator. Draft-3 already represents ARRAY_READ; the specialized loop collector and reducer currently do not consume it.
+
+Created proposed specs/loop-array-read-proposal.md and ADR 0008 on docs/loop-array-read-proposal. Recommend natural array-declaration + loop source, with body values[i] = values[i] + signed-int-literal, i++ or ++i. Propose separate RHS read and whole-assignment write steps, grouping addition with the write. Example {5,2,7} plus 1 has fifteen steps and ends [6,3,8]; normal false retires the index. Explicit plan identities keep this two-declaration shape separate from the existing scalar-fill variant. No schema change anticipated, subject to contract tests. Java evaluation/overflow references reviewed; runtime acceptance cases are proposed, not run.
+
+These are proposals awaiting user confirmation, not newly supported code. No runtime, schema, fixture or application files changed; no Java/Docker tests ran. The verified baseline remains the 218 automatic cases/164 comparisons from the prior task. Documentation paths/fences, the fifteen-step table and Git whitespace checks passed. Published design commit 605a48e and opened [PR #3](https://github.com/KhoaKhoa811/code-visualization/pull/3) against main; final publication notes follow on the same branch.
+
+Delivery update 2026-10-01: remote inspection showed PR #2 already merged and its feature branch deleted. Fetched origin/main (4588659), verified it includes f1eee95 and that this proposal differs by only four documentation/memory files. No merge was performed by this task. PR #3 is open; confirm the proposed stepping/source scope before implementation, and obtain separate approval before merging.
+
 ## Bounded classic for-loop verified - 2026-09-30
 
 Completed the approved implementation on feat/classic-for-recording. LoopProbe supplies dedicated immutable binding/type/scope/site facts; LoopTransformer validates the exact-source handoff and lowers one classic for into guarded native operations. Loop-only helper members share the existing recorder transport, emit draft-3 conditions and retire the index atomically on final false. LoopTracePlan validates repeated condition/store/update phases; the prototype reducer reconstructs forward/backward prefixes from recorded values. Both i++ and ++i are supported for the specified single-array-store loop. Legacy recorder source, schemas and checked-in fixtures remain unchanged.
