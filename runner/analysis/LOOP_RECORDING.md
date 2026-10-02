@@ -1,5 +1,7 @@
 # Classic for-loop recording
 
+This guide records the scalar-fill increment and its 2026-09-30 evidence. The later [read/addition extension](LOOP_READ_RECORDING.md) adds a separate two-binding shape and 80 cases to the shared gate; it preserves the scalar-fill behavior below.
+
 This prototype implements the bounded shape in [the loop specification](../../specs/for-loop-array-recording.md): a scalar, an int array, and one classic for loop that stores the scalar at each visited index. Both `i++` and `++i` are accepted. It is an execution/trace/replay prototype; no editor or diagram UI is included.
 
 ## Data flow

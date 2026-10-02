@@ -12,6 +12,19 @@ export function loopContractTests({ fixtures, validate, checkSchema, structural,
     assert(!failed(validate(value)), label);
     assert.deepEqual(value, before, 'Validation must not mutate supplied events or retire caller state');
   };
+  const readLoop = fixtures['loop-read-success.json'];
+  expectValid(readLoop, 'two-binding read loop');
+  expectValid(fixtures['loop-read-limit.json'], 'limit between read and write');
+  assert.equal(readLoop.events.length, 15);
+  const readSource = readFileSync(join(root, 'examples/sources/loop-read-success.java'));
+  assert.equal(createHash('sha256').update(readSource).digest('hex'), readLoop.sourceId);
+  for (const change of [r => { r.events[3].value.value = 6; }, r => { r.events[3].index = 1; },
+    r => { r.events[3].arrayId = 'missing'; }, r => { r.events[3].exitedVariableIds = ['variable-2']; },
+    r => { delete r.events[3].exitedVariableIds; }, r => { r.events[3].value.type = 'boolean'; }]) {
+    const bad = structuredClone(readLoop); change(bad); const before = structuredClone(bad);
+    assert(failed(validate(bad)), 'Invalid scoped read accepted'); assert.deepEqual(bad, before);
+  }
+  console.log('PASS draft-3 array-read fixtures: success, limit-before-write, source hash and six invalid reads');
   const append = (r, event) => {
     r.events.push({ ...structuredClone(event), sequence: r.events.length + 1 });
     r.safePlaybackBoundary = {lastSafeStep:r.events.length,lastSafeEventSequence:r.events.length};

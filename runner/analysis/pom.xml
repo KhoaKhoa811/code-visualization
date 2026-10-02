@@ -34,7 +34,7 @@
   <build>
     <finalName>array-analysis</finalName>
     <resources>
-      <resource><directory>../prototype/recording</directory><targetPath>recorder</targetPath><includes><include>Recorder.java</include><include>LoopRecorderMembers.java</include></includes></resource>
+      <resource><directory>../prototype/recording</directory><targetPath>recorder</targetPath><includes><include>Recorder.java</include><include>LoopRecorderMembers.java</include><include>LoopReadRecorderMembers.java</include></includes></resource>
     </resources>
     <testResources>
       <testResource><directory>../prototype/recording/original</directory><targetPath>fixtures</targetPath><includes><include>Main.java</include></includes></testResource>

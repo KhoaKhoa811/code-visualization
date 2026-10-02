@@ -9,10 +9,12 @@ export function replayLoop(events, count) {
       bindings[event.variableId] = {name:event.variableName, arrayId:event.arrayId};
       arrays[event.arrayId] = event.values.map(v => v.value);
     } else if (event.kind === 'ARRAY_WRITE') arrays[event.arrayId][event.index] = event.value.value;
-    else if (event.kind !== 'CONDITION') throw new Error('Unsupported loop replay event');
+    else if (event.kind !== 'CONDITION' && event.kind !== 'ARRAY_READ') throw new Error('Unsupported loop replay event');
     for (const id of event.exitedVariableIds) delete bindings[id];
   }
   const selected = count === 0 ? null : events[count - 1];
   return {bindings, arrays, highlight:selected ? structuredClone(selected.source) : null,
-    condition:selected?.kind === 'CONDITION' ? selected.value.value : null};
+    condition:selected?.kind === 'CONDITION' ? selected.value.value : null,
+    ...(selected?.kind === 'ARRAY_READ'
+      ? {read:{arrayId:selected.arrayId,index:selected.index,value:selected.value.value}} : {})};
 }

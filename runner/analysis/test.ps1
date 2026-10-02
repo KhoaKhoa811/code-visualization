@@ -1,6 +1,6 @@
 param([string]$FixtureDirectory,
-    [ValidateSet('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','deadline-probe','output-probe')]
-    [string[]]$Modes = @('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','deadline-probe','output-probe'))
+    [ValidateSet('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','acceptance-read-post','acceptance-read-pre','deadline-probe','output-probe')]
+    [string[]]$Modes = @('acceptance','acceptance-addition','acceptance-loop-post','acceptance-loop-pre','acceptance-read-post','acceptance-read-pre','deadline-probe','output-probe'))
 $ErrorActionPreference = 'Stop'
 $resultsDir = Join-Path $PSScriptRoot '.results'
 New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
@@ -99,16 +99,17 @@ foreach ($mode in $Modes) {
             $output = Invoke-Docker @('start', '--attach', $containerId) 60
             $state = (Invoke-Docker @('inspect', $containerId) | ConvertFrom-Json)[0].State
             $isLoop = $mode.StartsWith('acceptance-loop-')
-            $marker = if ($isLoop) { 'PASS: 34 loop-' } elseif ($mode -eq 'acceptance') { 'PASS: 18 analyzer cases' } else { 'PASS: 62 indexed-update fixtures' }
+            $isRead = $mode.StartsWith('acceptance-read-')
+            $marker = if ($isRead) { 'PASS: 40 read-' } elseif ($isLoop) { 'PASS: 34 loop-' } elseif ($mode -eq 'acceptance') { 'PASS: 18 analyzer cases' } else { 'PASS: 62 indexed-update fixtures' }
             if ($state.Running -or $state.ExitCode -ne 0 -or $state.OOMKilled -or $output -notmatch $marker) { throw 'No confirmed successful test completion' }
             $output | Set-Content -LiteralPath (Join-Path $resultsDir "$mode.txt") -Encoding UTF8
             $parts = $output -split 'REPORT_BEGIN\r?\n', 2
             if ($mode -eq 'acceptance' -and $parts.Count -ne 2) { throw 'Missing bounded analysis report' }
             $lines = $parts[0] -split '\r?\n'
-            $artifactPrefix = if ($isLoop) { 'LOOP_ARTIFACT ' } else { 'ARTIFACT ' }
+            $artifactPrefix = if ($isRead) { 'READ_ARTIFACT ' } elseif ($isLoop) { 'LOOP_ARTIFACT ' } else { 'ARTIFACT ' }
             $artifacts = @($lines | Where-Object { $_.StartsWith($artifactPrefix) })
-            $expectedCount = if ($isLoop) { 34 } elseif ($mode -eq 'acceptance') { 88 } else { 62 }
-            $batch = if ($isLoop) { $mode.Substring(11) + '.txt' } elseif ($mode -eq 'acceptance') { 'batch-0.txt' } else { 'batch-1.txt' }
+            $expectedCount = if ($isRead) { 40 } elseif ($isLoop) { 34 } elseif ($mode -eq 'acceptance') { 88 } else { 62 }
+            $batch = if ($isLoop -or $isRead) { $mode.Substring(11) + '.txt' } elseif ($mode -eq 'acceptance') { 'batch-0.txt' } else { 'batch-1.txt' }
             if ($artifacts.Count -ne $expectedCount) { throw 'Missing automatic transformation fixtures' }
             [IO.File]::WriteAllLines((Join-Path $FixtureDirectory $batch), $artifacts, (New-Object Text.UTF8Encoding $false))
             if ((Get-Item -LiteralPath (Join-Path $FixtureDirectory $batch)).Length -gt 1048576) { throw 'Fixture batch exceeds cap' }
