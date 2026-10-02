@@ -20,6 +20,7 @@ public final class AnalyzerAcceptance {
             return;
         }
         check(Runtime.version().feature() == 21, "Java 21 resolution environment");
+        if (args.length == 1 && args[0].startsWith("acceptance-read-")) { LoopReadAcceptance.run(args[0].equals("acceptance-read-pre")); return; }
         if (args.length == 1 && args[0].startsWith("acceptance-loop-")) { LoopAcceptance.run(args[0].equals("acceptance-loop-pre")); return; }
         if (args.length == 1 && args[0].equals("acceptance-addition")) { TransformationAcceptance.runAddition(); return; }
         try (InputStream in = AnalyzerAcceptance.class.getResourceAsStream("/fixtures/Main.java")) {

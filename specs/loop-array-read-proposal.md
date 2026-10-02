@@ -1,8 +1,8 @@
-# Proposal: array read and addition inside a classic for loop
+# Array read and addition inside a classic for loop
 
-Status: design proposal, 2026-09-30. The user approved review and a bounded proposal only. These rules require confirmation before implementation. No new Java support, schema, fixture or runtime test is claimed by this document. The verified baseline remains [classic for-loop recording](for-loop-array-recording.md).
+Status: design proposed 2026-09-30; user approved implementation on 2026-10-01. Bounded implementation and regression verification completed on 2026-10-02. The [recording guide](../runner/analysis/LOOP_READ_RECORDING.md) records scope, recovered runtime evidence and the Docker infrastructure retry. Earlier [scalar-fill loops](for-loop-array-recording.md) remain supported.
 
-## Proposed source shape
+## Approved source shape
 
 ```java
 public class Main {
@@ -15,13 +15,13 @@ public class Main {
 }
 ```
 
-Recommend accepting this natural two-statement main body, without requiring the unrelated scalar declaration used by the earlier scalar-fill example. Preserve that earlier shape and its identities unchanged. For the new shape, allow renamed bindings, existing signed decimal int literals, array lengths 0–16, literal initial indices, formatting variations, and either i++ or ++i. The RHS is exactly the same array/index read plus one signed decimal int literal; both accesses must resolve to the declared array and loop index. No optional unused scalar prelude is proposed.
+Accept this natural two-statement main body, without requiring the unrelated scalar declaration used by the earlier scalar-fill example. Preserve that earlier shape and its identities unchanged. For the new shape, allow renamed bindings, existing signed decimal int literals, array lengths 0–16, literal initial indices, formatting variations, and either i++ or ++i. The RHS is exactly the same array/index read plus one signed decimal int literal; both accesses must resolve to the declared array and loop index. An optional unused scalar prelude is outside this increment.
 
 Optional development observations after the loop are exactly `System.out.print("FINAL=" + java.util.Arrays.toString(values));` followed by `System.err.print("PROBE");`, with the resolved array name substituted. Validate JDK bindings and shadowing as in earlier probes. These are test observations, not general output-call tracing.
 
 Other operators, compound assignments, array-element increments, multiple RHS reads, different source/target indices or arrays, aliases, method calls, extra body statements, nested loops, break/continue and sorting remain later work. Valid unhandled programs retain the approved execution-admission/output-only policy.
 
-## Proposed observable steps
+## Approved observable steps
 
 The body assignment has two steps: ARRAY_READ highlights only the RHS `values[i]` and captures its old value without changing the array; ARRAY_WRITE highlights the whole assignment and captures the successfully stored result. Computing the addition introduces no separate event. This follows the existing distinction between array access and assignment, and the bounded arithmetic grouping in [index addition](index-addition-array-recording.md). It does not settle every future expression's stepping rules.
 
@@ -47,7 +47,9 @@ For the example above:
 
 Cursor 0 has no bindings. Reversing step 5 restores [5,2,7] and the read highlight/value; reversing step 4 changes attention without changing the array. Reversing step 15 restores i=3. Read/condition details belong only to their selected step and must not appear as extra program variables or persist on unrelated steps. This specifies playback state, not diagram styling or a frontend implementation.
 
-## Existing code and contract findings
+## Baseline findings from the 2026-09-30 design review
+
+These findings describe the earlier scalar-fill baseline and the required extension. Current implementation/verification status is in [the recording guide](../runner/analysis/LOOP_READ_RECORDING.md).
 
 - [Draft-3](../contracts/run-result-v3.schema.json) already includes ARRAY_READ with arrayId, index, typed int value and exitedVariableIds. The [validator](../contracts/validate.mjs) checks reads against captured array state. No schema version or field change is proposed; prove compatibility with new contract fixtures before enabling a producer.
 - [LoopProbe](../runner/analysis/src/main/java/dev/codeviz/analysis/LoopProbe.java) currently requires the scalar/array/loop prelude and a scalar RHS. Add a distinct body-fact variant and the two-declaration operation plan. Keep read access, write target, addition operand/operator/type and source spans explicit; do not reinterpret scalarReference as an array read.
@@ -67,13 +69,13 @@ A failed RHS access emits no successful read, write, update or normal exit. With
 
 Keep the existing 32-event, trace-byte, source, array and Docker limits. A successful run with m iterations has 3+4m events. The example completes at 15; budgets 1–14 stop at exact prefixes. Seven iterations complete at 31 events. Eight iterations hit 32 after the eighth read, before its write; sixteen elements starting at 9 also complete seven iterations at 31. Add bounded worker batches if needed rather than raising the one-MiB artifact cap.
 
-## Proposed implementation acceptance
+## Implementation acceptance
 
 1. Exact fifteen-step example with both update forms; six static sites, RHS-only read highlights and whole-assignment write highlights; independent forward/backward states and no duplicate evaluations.
 2. Zero/one/multiple iterations, signed addends including zero, repeated values, int wraparound, negative and high initial indices, seven/eight/sixteen-element limit boundaries, and event budgets 1–15.
 3. Original/generated Docker comparisons for output, final values and exception type/message; limited runs use independently expected prefixes and guard-placement checks.
 4. Read/store binding/type/source handoff checks, stale/swapped/missing facts, formatting/Unicode/collision cases and rejection of excluded expression shapes.
 5. Collector rejection of skipped/duplicate/reordered reads, stale values/indices, wrong arithmetic results, write-before-read and events after retirement; truncated records preserve whole-event prefixes. Draft-3 read fixtures and replay tests must pass without changing old schemas/fixtures.
-6. Retain all 218 current automatic cases/164 comparisons, seven manual cases/four comparisons, existing contract/collector/worker/delivery checks and cleanup. This design-only review runs none of those runtime tests.
+6. Retain all 218 earlier automatic cases/164 comparisons, seven manual cases/four comparisons, existing contract/collector/worker/delivery checks and cleanup. The original design-only review ran none of those runtime tests; implementation verification is tracked separately.
 
-Next approval requested: confirm this two-step body rule and natural two-statement source shape, then implement and verify this bounded extension. Frontend/API integration remains separate required work; completing this extension will not itself create a usable app UI.
+User confirmed this two-step body rule and natural two-statement source shape on 2026-10-01. Frontend/API integration remains separate required work; completing this extension will not itself create a usable app UI.

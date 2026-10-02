@@ -31,6 +31,7 @@ final class LoopAcceptance {
         check(frozen.equals(facts.syntaxCopy().orElseThrow().toString()), "copy cannot mutate original");
         check(!transformer.transform(facts, bytes(base + " "), 32).ready(), "stale source");
         for (var component : LoopProbe.Facts.class.getRecordComponents()) {
+            if (component.getAccessor().invoke(loop) == null) continue; // Optional body variant is absent on scalar-fill loops.
             Object bad = component.getType() == String.class ? "WRONG" : null;
             var changed = replaceRecord(loop, component.getName(), bad);
             var sites = replaceRecord(facts.sites(), "loop", changed);
@@ -128,12 +129,12 @@ final class LoopAcceptance {
         if (facts.sites().loop().scalar().name().equals("__CodevizRecorder"))
             check(generated.helperName().equals("__CodevizRecorder2") && capture.getNameAsString().equals("__CodevizCondition2"), "fresh helper and temporary");
     }
-    private static ArrayAnalyzer.Result with(ArrayAnalyzer.Result f, String field, Object value) throws Exception {
+    static ArrayAnalyzer.Result with(ArrayAnalyzer.Result f, String field, Object value) throws Exception {
         var c = ArrayAnalyzer.Result.class.getDeclaredConstructors()[0]; c.setAccessible(true);
         return (ArrayAnalyzer.Result)c.newInstance(f.source(), f.syntaxCopy().orElseThrow(), field.equals("bindings") ? value : f.bindings(),
             field.equals("scopes") ? value : f.scopes(), field.equals("accesses") ? value : f.accesses(), f.diagnostics(), f.entry(), field.equals("sites") ? value : f.sites(), f.completeness());
     }
-    @SuppressWarnings("unchecked") private static <T> T replaceRecord(T record, String field, Object value) throws Exception {
+    @SuppressWarnings("unchecked") static <T> T replaceRecord(T record, String field, Object value) throws Exception {
         var components = record.getClass().getRecordComponents(); Object[] args = new Object[components.length]; Class<?>[] types = new Class<?>[components.length];
         for (int n = 0; n < components.length; n++) { types[n] = components[n].getType(); args[n] = components[n].getName().equals(field) ? value : components[n].getAccessor().invoke(record); }
         return (T)record.getClass().getDeclaredConstructor(types).newInstance(args);

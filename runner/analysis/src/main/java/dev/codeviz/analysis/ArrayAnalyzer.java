@@ -228,6 +228,8 @@ public final class ArrayAnalyzer {
         if (!method.getAnnotations().isEmpty() || !method.getTypeParameters().isEmpty()
             || method.getModifiers().size() != 2 || !method.getParameter(0).getAnnotations().isEmpty()) return null;
         NodeList<Statement> statements = method.getBody().orElseThrow().getStatements();
+        if ((statements.size() == 2 || statements.size() == 4) && statements.get(1).isForStmt())
+            return LoopProbe.sites(source, statements, bindings, targets);
         if ((statements.size() == 3 || statements.size() == 5) && statements.get(2).isForStmt())
             return LoopProbe.sites(source, statements, bindings, targets);
         if (statements.size() >= 3 && statements.size() <= 7 && statements.get(1).isExpressionStmt()
@@ -289,7 +291,16 @@ public final class ArrayAnalyzer {
     private static boolean loopCandidate(Node node) {
         if (!(node.getParentNode().orElse(null) instanceof BlockStmt block)
             || !(block.getParentNode().orElse(null) instanceof MethodDeclaration)) return false;
-        return (block.getStatements().size() == 3 || block.getStatements().size() == 5) && block.getStatement(2) == node;
+        if ((block.getStatements().size() == 3 || block.getStatements().size() == 5) && block.getStatement(2) == node) return true;
+        if ((block.getStatements().size() == 2 || block.getStatements().size() == 4) && block.getStatement(1) == node) {
+            var body = ((ForStmt)node).getBody();
+            if (!body.isBlockStmt() || body.asBlockStmt().getStatements().size() != 1) return false;
+            var statement = body.asBlockStmt().getStatement(0);
+            return statement.isExpressionStmt() && statement.asExpressionStmt().getExpression() instanceof AssignExpr assignment
+                && assignment.getValue() instanceof BinaryExpr addition && addition.getOperator() == BinaryExpr.Operator.PLUS
+                && addition.getLeft().isArrayAccessExpr();
+        }
+        return false;
     }
     private static SourceSnapshot.Span span(SourceSnapshot source, Node node) {
         return source.span(node.getRange().orElseThrow());

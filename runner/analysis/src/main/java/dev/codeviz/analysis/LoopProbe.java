@@ -11,24 +11,30 @@ import java.util.*;
 
 /** Frozen facts for the single reviewed classic-for shape, separate from fixed-operation sites. */
 public final class LoopProbe {
+    public record ReadAddition(SourceSnapshot.Span read, SourceSnapshot.Span receiver, SourceSnapshot.Span index,
+                               SourceSnapshot.Span expression, SourceSnapshot.Span literal, String arrayBindingId,
+                               String indexBindingId, String operator, String resultType, int addend) {}
     public record Facts(ArrayAnalyzer.Binding scalar, ArrayAnalyzer.Binding array, ArrayAnalyzer.Binding index,
                         SourceSnapshot.Span loop, SourceSnapshot.Span scalarDeclaration, SourceSnapshot.Span arrayDeclaration,
                         SourceSnapshot.Span indexDeclaration, SourceSnapshot.Span condition, SourceSnapshot.Span store,
                         SourceSnapshot.Span update, String operator, SourceSnapshot.Span body,
                         SourceSnapshot.Span conditionIndex, SourceSnapshot.Span lengthReceiver, SourceSnapshot.Span storeIndex,
-                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span updateOperand, String comparison, String lengthType) {}
+                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span updateOperand, String comparison, String lengthType,
+                        ReadAddition readAddition) {}
 
     static ArrayAnalyzer.Sites sites(SourceSnapshot source, NodeList<Statement> statements,
             List<ArrayAnalyzer.Binding> bindings, Map<ArrayAccessExpr, ArrayAnalyzer.Binding> targets) {
         try {
-            var scalar = declaration(statements.get(0).asExpressionStmt().getExpression(), "int");
-            var array = declaration(statements.get(1).asExpressionStmt().getExpression(), "int[]");
-            var loop = statements.get(2).asForStmt();
+            boolean reading = statements.get(1).isForStmt();
+            int loopPosition = reading ? 1 : 2;
+            var scalar = reading ? null : declaration(statements.get(0).asExpressionStmt().getExpression(), "int");
+            var array = declaration(statements.get(loopPosition - 1).asExpressionStmt().getExpression(), "int[]");
+            var loop = statements.get(loopPosition).asForStmt();
             if (loop.getInitialization().size() != 1 || loop.getUpdate().size() != 1
                 || !loop.getBody().isBlockStmt() || loop.getBody().asBlockStmt().getStatements().size() != 1) return null;
             var index = declaration(loop.getInitialization().get(0), "int");
-            var x = scalar.getVariable(0); var a = array.getVariable(0); var i = index.getVariable(0);
-            if (!ArrayAnalyzer.intLiteral(x.getInitializer().orElseThrow()) || !ArrayAnalyzer.intLiteral(i.getInitializer().orElseThrow())) return null;
+            var x = reading ? null : scalar.getVariable(0); var a = array.getVariable(0); var i = index.getVariable(0);
+            if ((!reading && !ArrayAnalyzer.intLiteral(x.getInitializer().orElseThrow())) || !ArrayAnalyzer.intLiteral(i.getInitializer().orElseThrow())) return null;
             var init = a.getInitializer().orElseThrow().asArrayInitializerExpr();
             if (init.getValues().size() > 16 || !init.getValues().stream().allMatch(ArrayAnalyzer::intLiteral)) return null;
             var condition = loop.getCompare().orElseThrow().asBinaryExpr();
@@ -43,15 +49,25 @@ public final class LoopProbe {
             var store = loop.getBody().asBlockStmt().getStatement(0).asExpressionStmt().getExpression().asAssignExpr();
             var access = store.getTarget().asArrayAccessExpr();
             if (store.getOperator() != AssignExpr.Operator.ASSIGN || !reference(access.getName(), a, "int[]")
-                || !reference(access.getIndex(), i, "int") || !reference(store.getValue(), x, "int")) return null;
-            var xb = binding(source, bindings, x); var ab = binding(source, bindings, a); var ib = binding(source, bindings, i);
-            if (!ab.equals(targets.get(access)) || !xb.scopeId().equals(ab.scopeId()) || xb.scopeId().equals(ib.scopeId())
-                || Set.of(xb.id(), ab.id(), ib.id()).size() != 3) return null;
-            if (statements.size() == 5 && !probes(statements, x, a, bindings)) return null;
-            var facts = new Facts(xb, ab, ib, span(source, loop), span(source, scalar), span(source, array), span(source, index),
+                || !reference(access.getIndex(), i, "int") || (!reading && !reference(store.getValue(), x, "int"))) return null;
+            var xb = reading ? null : binding(source, bindings, x); var ab = binding(source, bindings, a); var ib = binding(source, bindings, i);
+            if (!ab.equals(targets.get(access)) || ab.scopeId().equals(ib.scopeId()) || ab.id().equals(ib.id())
+                || (!reading && (!xb.scopeId().equals(ab.scopeId()) || Set.of(xb.id(), ab.id(), ib.id()).size() != 3))) return null;
+            ReadAddition readAddition = null;
+            if (reading) {
+                var addition = store.getValue().asBinaryExpr(); var read = addition.getLeft().asArrayAccessExpr();
+                if (addition.getOperator() != BinaryExpr.Operator.PLUS || !reference(read.getName(), a, "int[]")
+                    || !reference(read.getIndex(), i, "int") || !ab.equals(targets.get(read)) || !ArrayAnalyzer.intLiteral(addition.getRight())
+                    || !read.calculateResolvedType().describe().equals("int") || !addition.calculateResolvedType().describe().equals("int")) return null;
+                readAddition = new ReadAddition(span(source, read), span(source, read.getName()), span(source, read.getIndex()),
+                    span(source, addition), span(source, addition.getRight()), ab.id(), ib.id(), "PLUS", "int",
+                    Integer.parseInt(addition.getRight().toString(new PrettyPrinterConfiguration().setPrintComments(false).setPrintJavadoc(false))));
+            }
+            if (statements.size() == loopPosition + 3 && !probes(statements, x, a, bindings)) return null;
+            var facts = new Facts(xb, ab, ib, span(source, loop), reading ? null : span(source, scalar), span(source, array), span(source, index),
                 span(source, condition), span(source, store), span(source, update), update.getOperator().name(), span(source, loop.getBody()),
                 span(source, condition.getLeft()), span(source, length.getScope()), span(source, access.getIndex()),
-                span(source, store.getValue()), span(source, update.getExpression()), "LESS", "int");
+                reading ? null : span(source, store.getValue()), span(source, update.getExpression()), "LESS", "int", readAddition);
             return new ArrayAnalyzer.Sites(null, null, null, null, ArrayAnalyzer.ProbeKind.LOOP, null, null, null, null, null, null, null, null, facts);
         } catch (RuntimeException outsideShape) { return null; }
     }
@@ -73,15 +89,16 @@ public final class LoopProbe {
     private static boolean probes(NodeList<Statement> statements, VariableDeclarator x, VariableDeclarator a, List<ArrayAnalyzer.Binding> bindings) {
         if (bindings.stream().anyMatch(b -> b.name().equals("java") || b.name().equals("System"))) return false;
         var printer = new PrettyPrinterConfiguration().setPrintComments(false).setPrintJavadoc(false);
-        String out = "System.out.print(\"FINAL=\" + " + x.getNameAsString() + " + \",\" + java.util.Arrays.toString(" + a.getNameAsString() + "));";
-        if (!statements.get(3).toString(printer).equals(out) || !statements.get(4).toString(printer).equals("System.err.print(\"PROBE\");")) return false;
-        for (int n = 3; n < 5; n++) {
+        int probe = x == null ? 2 : 3;
+        String out = "System.out.print(\"FINAL=\" + " + (x == null ? "" : x.getNameAsString() + " + \",\" + ") + "java.util.Arrays.toString(" + a.getNameAsString() + "));";
+        if (!statements.get(probe).toString(printer).equals(out) || !statements.get(probe + 1).toString(printer).equals("System.err.print(\"PROBE\");")) return false;
+        for (int n = probe; n < probe + 2; n++) {
             var field = statements.get(n).asExpressionStmt().getExpression().asMethodCallExpr().getScope().orElseThrow().asFieldAccessExpr().resolve().asField();
             if (!field.declaringType().getQualifiedName().equals("java.lang.System") || !field.getType().describe().equals("java.io.PrintStream")) return false;
         }
-        var call = statements.get(3).findAll(MethodCallExpr.class).stream().filter(c -> c.getNameAsString().equals("toString")).findFirst().orElseThrow();
+        var call = statements.get(probe).findAll(MethodCallExpr.class).stream().filter(c -> c.getNameAsString().equals("toString")).findFirst().orElseThrow();
         if (!reference(call.getArgument(0), a, "int[]")) return false;
-        for (NameExpr name : statements.get(3).findAll(NameExpr.class))
+        if (x != null) for (NameExpr name : statements.get(probe).findAll(NameExpr.class))
             if (name.getNameAsString().equals(x.getNameAsString()) && !reference(name, x, "int")) return false;
         var jdk = new ReflectionTypeSolver(true);
         return jdk.solveType("java.util.Arrays").getDeclaredMethods().stream().filter(m -> m.isStatic()

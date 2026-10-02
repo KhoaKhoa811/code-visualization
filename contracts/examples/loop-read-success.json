@@ -1,0 +1,356 @@
+{
+  "runId": "fixture-loop-read-success",
+  "sourceId": "18c77e5239b628567f1d854f7203487286d8c0bb383876ad12b80903558463d8",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "complete",
+  "diagnostics": [],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 5
+        },
+        {
+          "type": "int",
+          "value": 2
+        },
+        {
+          "type": "int",
+          "value": 7
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 14
+        },
+        "end": {
+          "line": 4,
+          "column": 23
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "variableId": "variable-2",
+      "variableName": "i",
+      "value": {
+        "type": "int",
+        "value": 0
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 34
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 5
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 5,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 13
+        },
+        "end": {
+          "line": 5,
+          "column": 38
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 6
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 6,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 44
+        },
+        "end": {
+          "line": 4,
+          "column": 47
+        }
+      },
+      "variableId": "variable-2",
+      "value": {
+        "type": "int",
+        "value": 1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 7,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 8,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 34
+        }
+      },
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 2
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 9,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 13
+        },
+        "end": {
+          "line": 5,
+          "column": 38
+        }
+      },
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 10,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 44
+        },
+        "end": {
+          "line": 4,
+          "column": 47
+        }
+      },
+      "variableId": "variable-2",
+      "value": {
+        "type": "int",
+        "value": 2
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 11,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 12,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 34
+        }
+      },
+      "arrayId": "array-1",
+      "index": 2,
+      "value": {
+        "type": "int",
+        "value": 7
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 13,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 13
+        },
+        "end": {
+          "line": 5,
+          "column": 38
+        }
+      },
+      "arrayId": "array-1",
+      "index": 2,
+      "value": {
+        "type": "int",
+        "value": 8
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 14,
+      "kind": "VARIABLE_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 44
+        },
+        "end": {
+          "line": 4,
+          "column": 47
+        }
+      },
+      "variableId": "variable-2",
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 15,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": false
+      },
+      "exitedVariableIds": [
+        "variable-2"
+      ]
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 15,
+    "lastSafeEventSequence": 15
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

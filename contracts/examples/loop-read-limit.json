@@ -1,0 +1,129 @@
+{
+  "runId": "fixture-loop-read-limit",
+  "sourceId": "18c77e5239b628567f1d854f7203487286d8c0bb383876ad12b80903558463d8",
+  "schemaVersion": "draft-3",
+  "executionOutcome": "limited",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "trace_limit",
+      "message": "Designed limit after first read, before its write.",
+      "source": null
+    },
+    {
+      "category": "visualization_limitation",
+      "message": "Only the safe four-step prefix is available.",
+      "source": null
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 5
+        },
+        {
+          "type": "int",
+          "value": 2
+        },
+        {
+          "type": "int",
+          "value": 7
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 14
+        },
+        "end": {
+          "line": 4,
+          "column": 23
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "variableId": "variable-2",
+      "variableName": "i",
+      "value": {
+        "type": "int",
+        "value": 0
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 42
+        }
+      },
+      "scopeId": "scope-loop-1",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 25
+        },
+        "end": {
+          "line": 5,
+          "column": 34
+        }
+      },
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 5
+      },
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 4,
+    "lastSafeEventSequence": 4
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}
