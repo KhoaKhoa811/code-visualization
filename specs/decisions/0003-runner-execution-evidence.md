@@ -12,6 +12,8 @@ Keep the existing Docker CLI execution and output collection. Before classifying
 
 The event query ends at a fixed timestamp, is bounded to three seconds within the existing stage/overall deadline, and retains at most 64 KiB of management output. Program stdout/stderr remain outside the evidence channel. Source is never rerun to recover missing evidence. Cleanup remains independently reported.
 
+Approved refinement, 2026-10-03: obtain that cutoff from the daemon's `SystemTime` after exec, rather than the host clock, to remove the demonstrated host/daemon clock dependency. Clock lookup has a three-second maximum within the same stage/overall budget. Validate event timestamps against the cutoff and expose bounded aggregate failure diagnostics while preserving identity/exit checks. See the [implementation and verification record](../docker-exec-evidence-fix.md). The original incident cause remains unconfirmed.
+
 This avoids adding a Docker Engine API client or an in-container status writer for the small prototype. The Docker management endpoint is trusted; submitted code has no access to it.
 
 ## Limits and verification

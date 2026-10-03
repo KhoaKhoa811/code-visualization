@@ -1,5 +1,15 @@
 # Project progress and development record
 
+## Docker execution-evidence fix verified - 2026-10-03
+
+User approved the runner follow-up. Implemented on fix/docker-exec-evidence: daemon SystemTime supplies the event cutoff after exec; event timestamps are validated; failures provide bounded metadata/counts without raw management text. Exact container/command/exec/exit checks, stage/overall budgets, output bounds, cancellation and cleanup remain enforced. No retries or submitted-code reruns. The original October 2 trigger is still unconfirmed; bounded Docker history and daemon clock movement remain limitations.
+
+Fresh runner/prototype/test.ps1 passed (exit 0, empty stderr): 32 simulated lifecycle cases, seven actual Docker runner cases, stream/collector checks, seven manual recording cases, four original/instrumented comparisons and all seven generated contract/source/forward-backward replay checks. Added simulations cover host/daemon clock differences, malformed/unavailable clocks, management output overflow, invalid/future timestamps, duplicate creation, cancellation, management timeouts and the shared execution deadline. Diagnostic truncation/privacy also passed. Final Docker label inspections found no prototype/probe containers. Evidence: runner/analysis/.results/evidence-fix-gate-20261003-1.out.log, .err.log and .exit.txt.
+
+The broader 298 automatic transformation cases were not rerun for this runner-only change; their October 1/2 evidence remains historical. No Java support, trace schema or frontend/backend integration was added. Milestone 1 remains incomplete. See specs/docker-exec-evidence-fix.md and the updated ADR 0003.
+
+Fetch confirmed investigation PR #5 merged into origin/main at 6653796. This fix will target main. Verification is complete; commit/push/PR delivery is pending. Do not merge or start the next task without confirmation.
+
 ## Docker execution-evidence investigation - 2026-10-03
 
 Published investigation commit 4e9cd38 and opened [PR #5](https://github.com/KhoaKhoa811/code-visualization/pull/5) from investigate/docker-exec-evidence to main. The PR is open and unmerged. These final publication notes follow on the same branch. Investigation is complete; the proposed runner behavior change still requires user approval.

@@ -1,6 +1,6 @@
 # Docker execution-evidence investigation
 
-Status: investigation completed 2026-10-03. No production runner fix is implemented. The October 2 trigger remains unconfirmed; a timestamp-cutoff failure mechanism is reproduced under a controlled condition.
+Status: investigation completed 2026-10-03. This records the pre-fix behavior and evidence. The approved [follow-up implementation](docker-exec-evidence-fix.md) now tracks the runner change. The October 2 trigger remains unconfirmed; a timestamp-cutoff failure mechanism was reproduced under a controlled condition.
 
 ## Incident and scope
 
