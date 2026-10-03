@@ -8,7 +8,7 @@ Fresh runner/prototype/test.ps1 passed (exit 0, empty stderr): 32 simulated life
 
 The broader 298 automatic transformation cases were not rerun for this runner-only change; their October 1/2 evidence remains historical. No Java support, trace schema or frontend/backend integration was added. Milestone 1 remains incomplete. See specs/docker-exec-evidence-fix.md and the updated ADR 0003.
 
-Fetch confirmed investigation PR #5 merged into origin/main at 6653796. This fix will target main. Verification is complete; commit/push/PR delivery is pending. Do not merge or start the next task without confirmation.
+Fetch confirmed investigation PR #5 merged into origin/main at 6653796. Published implementation commit 7f96801 and opened [PR #6](https://github.com/KhoaKhoa811/code-visualization/pull/6) from fix/docker-exec-evidence to main. The PR is open and unmerged; these final handoff notes follow on the same branch. The approved task is complete. Do not merge or start the next task without confirmation.
 
 ## Docker execution-evidence investigation - 2026-10-03
 
