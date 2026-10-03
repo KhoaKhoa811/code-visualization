@@ -1,0 +1,20 @@
+{
+  "runId": "fixture-conditional-output-only",
+  "sourceId": "082c21f92594c427ac9f42f9f2389fbc9f1bfe31838a6fae2ee3e4dbdb89f003",
+  "schemaVersion": "draft-4",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "unavailable",
+  "diagnostics": [
+    {
+      "category": "visualization_limitation",
+      "message": "Illustrative unavailable recording; no runtime fallback claimed.",
+      "source": null
+    }
+  ],
+  "events": null,
+  "safePlaybackBoundary": null,
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

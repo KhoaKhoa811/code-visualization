@@ -4,12 +4,15 @@ import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import assert from 'node:assert/strict';
 import { loopContractTests } from './loop-contract-tests.mjs';
+import { conditionalSemantics } from './conditional-semantics.mjs';
+import { conditionalContractTests } from './conditional-contract-tests.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const schemas = {
   'draft-1': JSON.parse(readFileSync(join(root, 'run-result.schema.json'), 'utf8')),
   'draft-2': JSON.parse(readFileSync(join(root, 'run-result-v2.schema.json'), 'utf8')),
-  'draft-3': JSON.parse(readFileSync(join(root, 'run-result-v3.schema.json'), 'utf8'))
+  'draft-3': JSON.parse(readFileSync(join(root, 'run-result-v3.schema.json'), 'utf8')),
+  'draft-4': JSON.parse(readFileSync(join(root, 'run-result-v4.schema.json'), 'utf8'))
 };
 let schema = schemas['draft-1']; // Synchronous validation selects the matching trusted contract.
 const supported = new Set(['$schema', '$defs', '$ref', 'title', 'description', 'type',
@@ -106,6 +109,7 @@ function semantic(result) {
     }
   }
   if (result.events === null) return errors;
+  if (result.schemaVersion === 'draft-4') return [...errors, ...conditionalSemantics(result)];
   result.events.forEach((e, i) => {
     range(e.source, 'event ' + i);
     if (e.sequence !== i + 1) errors.push('event sequence must be contiguous from 1');
@@ -301,6 +305,7 @@ function selfTest(fixtures) {
   console.log('PASS: recorded wrapped-int index value uses existing draft-2');
   console.log('PASS: ' + tests.length + ' negative cases, 3 positive edge cases, unsupported-keyword guard');
   loopContractTests({fixtures, validate, checkSchema, structural, root});
+  conditionalContractTests({fixtures, validate, root});
 }
 
 try {

@@ -1,5 +1,23 @@
 # Draft Run-Result Fixtures
 
+## Draft-4 conditional fixtures added 2026-10-03
+
+These nine designed results model [conditional compare-and-swap](../../specs/compare-swap-proposal.md). They are not Java execution captures. Source IDs hash the exact UTF-8/LF snapshots under sources/, all logically named Main.java. No Java was compiled or executed during this contract task.
+
+| Result | Source snapshot | Expected coverage |
+| --- | --- | --- |
+| [conditional-success.json](conditional-success.json) | [conditional-success.java](sources/conditional-success.java) | Nine steps; final [1,3]; temp disappears with final write |
+| [conditional-false.json](conditional-false.json) | [conditional-false.java](sources/conditional-false.java) | Four steps; [1,3] unchanged; no temp |
+| [conditional-equal.json](conditional-equal.json) | [conditional-equal.java](sources/conditional-equal.java) | Four steps; equal operands produce false |
+| [conditional-same-index.json](conditional-same-index.json) | [conditional-same-index.java](sources/conditional-same-index.java) | Two separately recorded accesses at distinct source sites; false |
+| [conditional-left-error.json](conditional-left-error.json) | [conditional-left-error.java](sources/conditional-left-error.java) | Empty array; only declaration before left access fails |
+| [conditional-right-error.json](conditional-right-error.json) | [conditional-right-error.java](sources/conditional-right-error.java) | Declaration and left read before right access fails |
+| [conditional-limit.json](conditional-limit.json) | [conditional-success.java](sources/conditional-success.java) | Eight safe steps; [1,1] and temp=3; no invented final write/exit |
+| [conditional-cancel.json](conditional-cancel.json) | [conditional-success.java](sources/conditional-success.java) | Five safe steps; initializer read captured, temp not yet declared |
+| [conditional-output-only.json](conditional-output-only.json) | [conditional-success.java](sources/conditional-success.java) | Illustrative unavailable visualization with null events/boundary |
+
+Diagnostics and empty console fields are illustrative. The unavailable example demonstrates the result envelope, not an implemented fallback or a claim that this source must be output-only. Source/range and independently expected cursor checks run in the self-test. Later collector tests must prove actual branch order and source-specific dependencies; these fixtures do not implement that collector.
+
 ## Draft-3 array-read fixtures added 2026-10-01
 
 [loop-read-success.json](loop-read-success.json) models the approved fifteen-step read/addition loop; [loop-read-limit.json](loop-read-limit.json) stops at step 4, after the first RHS read and before the write. Both reference the exact UTF-8/LF [source snapshot](sources/loop-read-success.java), logically named Main.java. These are designed contract examples, not Java runtime captures. They reuse draft-3 unchanged and add source-hash, read-consistency and six invalid-read checks to the self-test. Runtime evidence belongs to [the implementation guide](../../runner/analysis/LOOP_READ_RECORDING.md).

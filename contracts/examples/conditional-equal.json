@@ -1,0 +1,129 @@
+{
+  "runId": "fixture-conditional-equal",
+  "sourceId": "d04e90711aa65635c30839587e5679c9e1b59d5f67d110fecd464a4822e01ac3",
+  "schemaVersion": "draft-4",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "complete",
+  "diagnostics": [],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 30
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 2
+        },
+        {
+          "type": "int",
+          "value": 2
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 22
+        }
+      },
+      "scopeId": "scope-main",
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 2
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-main",
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 2
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-main",
+      "conditionRole": "IF",
+      "value": {
+        "type": "boolean",
+        "value": false
+      },
+      "comparison": {
+        "operator": ">",
+        "left": {
+          "type": "int",
+          "value": 2
+        },
+        "right": {
+          "type": "int",
+          "value": 2
+        },
+        "leftReadSequence": 2,
+        "rightReadSequence": 3
+      },
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 4,
+    "lastSafeEventSequence": 4
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

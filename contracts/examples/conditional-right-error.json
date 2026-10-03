@@ -1,0 +1,83 @@
+{
+  "runId": "fixture-conditional-right-error",
+  "sourceId": "55025e961807ab8c023a80525f4898e92ee5c4502a983b7e34034a0291189fb9",
+  "schemaVersion": "draft-4",
+  "executionOutcome": "failed",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "runtime_error",
+      "message": "Illustrative array access failure; not a captured Java execution.",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 34
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 27
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 3
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 22
+        }
+      },
+      "scopeId": "scope-main",
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 2,
+    "lastSafeEventSequence": 2
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

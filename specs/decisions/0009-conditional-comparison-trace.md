@@ -1,6 +1,6 @@
 # ADR 0009: Conditional comparison and swap steps
 
-Status: proposed 2026-10-03; awaiting design approval. Documentation creation is approved, implementation is not.
+Status: proposed and accepted 2026-10-03 after PR #7 merged; approved contract implementation is verified. [Draft-4 checks](../../contracts/README.md) cover designed traces only. Java producer/collector implementation requires the next approval.
 
 For the first bounded conditional swap, propose two ARRAY_READ steps followed by one CONDITION carrying captured int operands and the boolean branch decision. The body records its own read/declaration/read/write/write operations. A taken branch has nine steps; a false branch has four. Attach branch-local temp retirement to the final successful body write, without a bookkeeping click or fabricated exit after failure.
 
