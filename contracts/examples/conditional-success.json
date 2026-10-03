@@ -1,0 +1,246 @@
+{
+  "runId": "fixture-conditional-success",
+  "sourceId": "082c21f92594c427ac9f42f9f2389fbc9f1bfe31838a6fae2ee3e4dbdb89f003",
+  "schemaVersion": "draft-4",
+  "executionOutcome": "completed",
+  "visualizationCoverage": "complete",
+  "diagnostics": [],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 30
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [
+        {
+          "type": "int",
+          "value": 3
+        },
+        {
+          "type": "int",
+          "value": 1
+        }
+      ],
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 2,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 22
+        }
+      },
+      "scopeId": "scope-main",
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 3,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 25
+        },
+        "end": {
+          "line": 4,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-main",
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 4,
+      "kind": "CONDITION",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-main",
+      "conditionRole": "IF",
+      "value": {
+        "type": "boolean",
+        "value": true
+      },
+      "comparison": {
+        "operator": ">",
+        "left": {
+          "type": "int",
+          "value": 3
+        },
+        "right": {
+          "type": "int",
+          "value": 1
+        },
+        "leftReadSequence": 2,
+        "rightReadSequence": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 5,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 24
+        },
+        "end": {
+          "line": 5,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-if-1",
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 6,
+      "kind": "VARIABLE_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 5,
+          "column": 13
+        },
+        "end": {
+          "line": 5,
+          "column": 33
+        }
+      },
+      "scopeId": "scope-if-1",
+      "variableId": "variable-2",
+      "variableName": "temp",
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 7,
+      "kind": "ARRAY_READ",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 25
+        },
+        "end": {
+          "line": 6,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-if-1",
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 8,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 34
+        }
+      },
+      "scopeId": "scope-if-1",
+      "arrayId": "array-1",
+      "index": 0,
+      "value": {
+        "type": "int",
+        "value": 1
+      },
+      "exitedVariableIds": []
+    },
+    {
+      "sequence": 9,
+      "kind": "ARRAY_WRITE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 7,
+          "column": 13
+        },
+        "end": {
+          "line": 7,
+          "column": 29
+        }
+      },
+      "scopeId": "scope-if-1",
+      "arrayId": "array-1",
+      "index": 1,
+      "value": {
+        "type": "int",
+        "value": 3
+      },
+      "exitedVariableIds": [
+        "variable-2"
+      ]
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 9,
+    "lastSafeEventSequence": 9
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

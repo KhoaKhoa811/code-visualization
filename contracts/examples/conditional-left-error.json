@@ -1,0 +1,55 @@
+{
+  "runId": "fixture-conditional-left-error",
+  "sourceId": "20930f1964fa2165edfda1d78b048b777b9771c4f4a7748e2b019d9bd94b0d51",
+  "schemaVersion": "draft-4",
+  "executionOutcome": "failed",
+  "visualizationCoverage": "partial",
+  "diagnostics": [
+    {
+      "category": "runtime_error",
+      "message": "Illustrative array access failure; not a captured Java execution.",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 4,
+          "column": 13
+        },
+        "end": {
+          "line": 4,
+          "column": 22
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "ARRAY_DECLARE",
+      "source": {
+        "file": "Main.java",
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 26
+        }
+      },
+      "scopeId": "scope-main",
+      "variableId": "variable-1",
+      "variableName": "values",
+      "arrayId": "array-1",
+      "values": [],
+      "exitedVariableIds": []
+    }
+  ],
+  "safePlaybackBoundary": {
+    "lastSafeStep": 1,
+    "lastSafeEventSequence": 1
+  },
+  "console": {
+    "stdout": "",
+    "stderr": ""
+  }
+}

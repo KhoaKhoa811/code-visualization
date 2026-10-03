@@ -1,6 +1,6 @@
 # Conditional array compare-and-swap tracing
 
-Status: proposed 2026-10-03. The user approved this design/documentation task, not the event design, contract implementation or Java implementation. Milestone 1 remains incomplete.
+Status: proposed and approved 2026-10-03 after PR #7 merged. The separately approved contract increment is now implemented and verified; see [contract status](../contracts/README.md). Java analysis/instrumentation/recording implementation remains unapproved and unfinished. Milestone 1 remains incomplete. Proposed wording below records the design that led to this contract.
 
 ## Purpose and bounded source
 
@@ -50,7 +50,7 @@ Use existing original-source identity, UTF-16 positions and exclusive ends. Each
 
 ## Proposed draft-4 contract
 
-Draft-3's closed union cannot carry comparison operands; its validator also treats every CONDITION as a loop decision and permits retirement only on false. Do not loosen or reinterpret draft-3. Introduce a separately selected draft-4 for this new producer, retaining draft-1/2/3 schemas, fixtures, validators and producer behavior. No schema is created by this documentation task.
+Draft-3's closed union cannot carry comparison operands; its validator also treats every CONDITION as a loop decision and permits retirement only on false. Do not loosen or reinterpret draft-3. Introduce a separately selected draft-4 for this new producer, retaining draft-1/2/3 schemas, fixtures, validation behavior and producer behavior. The original documentation task created no schema; the subsequent contract task added [draft-4](../contracts/run-result-v4.schema.json).
 
 Retain the result envelope, one event per observable step, typed int/boolean values, source identity and safe-boundary event counts. Proposed draft-4 payload rules:
 
@@ -92,4 +92,4 @@ Future implementation acceptance cases:
 
 First review/approve the nine-step semantics, false branch and temp retirement, and the proposed draft-4 fields. Then implement and verify the contract in a separate approved task. Next implement the bounded analyzer/lowering/recorder/collector/replay path and semantic comparisons. Nested sorting loops, aliasing, remaining Milestone 1 coverage and interactive worker behavior remain later increments before full application integration. Each task follows the existing memory/commit/push/PR workflow.
 
-Documentation verification only: review internal links, source/step correspondence, compatibility and scope consistency. No Java program, schema implementation or runtime acceptance case is delivered by this proposal.
+Original proposal verification was documentation-only. Subsequent contract verification: nine designed fixtures, 54 rejection cases, nine partial prefixes, atomic rejection, int extremes, exact source/hash checks and forward/backward fixture states passed alongside earlier suites. No Java runtime acceptance case or production playback implementation is delivered yet. Source-plan branch/swap ordering, exact exit placement and runtime capture remain the future collector/producer's responsibility.

@@ -1,0 +1,630 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Draft-4 conditional comparison and scoped array trace result",
+  "description": "Narrow conditional comparison contract. Earlier loop contracts retain their own versions.",
+  "type": "object",
+  "properties": {
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "const": "draft-4"
+    },
+    "executionOutcome": {
+      "enum": [
+        "completed",
+        "failed",
+        "cancelled",
+        "limited"
+      ]
+    },
+    "visualizationCoverage": {
+      "enum": [
+        "complete",
+        "partial",
+        "unavailable"
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      },
+      "minItems": 0
+    },
+    "events": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "minItems": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "safePlaybackBoundary": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/boundary"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "console": {
+      "type": "object",
+      "properties": {
+        "stdout": {
+          "type": "string"
+        },
+        "stderr": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "stdout",
+        "stderr"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "runId",
+    "sourceId",
+    "schemaVersion",
+    "executionOutcome",
+    "visualizationCoverage",
+    "diagnostics",
+    "events",
+    "safePlaybackBoundary",
+    "console"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "visualizationCoverage": {
+          "const": "complete"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "minItems": 1
+        },
+        "safePlaybackBoundary": {
+          "$ref": "#/$defs/boundary"
+        }
+      }
+    },
+    {
+      "properties": {
+        "visualizationCoverage": {
+          "const": "partial"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "minItems": 1
+        },
+        "safePlaybackBoundary": {
+          "$ref": "#/$defs/boundary"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    {
+      "properties": {
+        "visualizationCoverage": {
+          "const": "unavailable"
+        },
+        "events": {
+          "type": "null"
+        },
+        "safePlaybackBoundary": {
+          "type": "null"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "minItems": 1
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "position": {
+      "type": "object",
+      "properties": {
+        "line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "line",
+        "column"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "$ref": "#/$defs/position"
+        },
+        "end": {
+          "$ref": "#/$defs/position"
+        }
+      },
+      "required": [
+        "file",
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "int": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "int"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "diagnostic": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "enum": [
+            "compilation_error",
+            "runtime_error",
+            "visualization_limitation",
+            "trace_limit",
+            "execution_policy",
+            "engine_error",
+            "cancelled",
+            "resource_limit"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "category",
+        "message",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "boundary": {
+      "type": "object",
+      "properties": {
+        "lastSafeStep": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "lastSafeEventSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "lastSafeStep",
+        "lastSafeEventSequence"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "ARRAY_DECLARE"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "variableId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "variableName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "arrayId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/int"
+              },
+              "minItems": 0
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "variableId",
+            "variableName",
+            "arrayId",
+            "values",
+            "exitedVariableIds",
+            "scopeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "ARRAY_READ"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "arrayId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            "value": {
+              "$ref": "#/$defs/int"
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "arrayId",
+            "index",
+            "value",
+            "exitedVariableIds",
+            "scopeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "ARRAY_WRITE"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "arrayId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            "value": {
+              "$ref": "#/$defs/int"
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "arrayId",
+            "index",
+            "value",
+            "exitedVariableIds",
+            "scopeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "VARIABLE_DECLARE"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "variableId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "$ref": "#/$defs/int"
+            },
+            "variableName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "variableId",
+            "value",
+            "variableName",
+            "exitedVariableIds",
+            "scopeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "VARIABLE_WRITE"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "variableId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "$ref": "#/$defs/int"
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "variableId",
+            "value",
+            "exitedVariableIds",
+            "scopeId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "kind": {
+              "const": "CONDITION"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            },
+            "scopeId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "$ref": "#/$defs/boolean"
+            },
+            "exitedVariableIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            },
+            "conditionRole": {
+              "const": "IF"
+            },
+            "comparison": {
+              "$ref": "#/$defs/comparison"
+            }
+          },
+          "required": [
+            "sequence",
+            "kind",
+            "source",
+            "scopeId",
+            "value",
+            "exitedVariableIds",
+            "conditionRole",
+            "comparison"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "boolean": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "boolean"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "comparison": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "const": ">"
+        },
+        "left": {
+          "$ref": "#/$defs/int"
+        },
+        "right": {
+          "$ref": "#/$defs/int"
+        },
+        "leftReadSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "rightReadSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "operator",
+        "left",
+        "right",
+        "leftReadSequence",
+        "rightReadSequence"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
