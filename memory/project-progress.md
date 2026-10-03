@@ -1,5 +1,13 @@
 # Project progress and development record
 
+## Docker execution-evidence investigation - 2026-10-03
+
+Confirmed PR #4 merged via fetch; synced main to ff84c1f and created investigate/docker-exec-evidence. User approved investigation only: inspect the runner, perform focused reproduction, propose a fix and update both memories. Production RunnerHarness/ExecEvidence are unchanged. Added a reproducible trusted diagnostic and specs/docker-exec-evidence-investigation.md.
+
+Twenty uniquely numbered echo executions in a restricted Docker container passed immediate, delayed-same-cutoff and refreshed-cutoff evidence queries. A deliberately stale cutoff reproduced the exact missing-identity error for a successful command; this proves host-cutoff sensitivity but NOT the October 2 trigger. Original raw query/cutoff were not retained. Observed successful cutoff margins: 13.459564–17.229969 ms after daemon completion timestamps. Docker client/server 29.8.0. First probe startup exceeded a diagnostic-only five-second creation deadline; cleanup passed. Aligning that deadline with the runner's existing ten seconds produced exit 0; final inspection found no diagnostic containers. Captures are under runner/analysis/.results/evidence-probe-20261003-1 and -2. No application regression gate ran or was needed for this investigation.
+
+Recommended next task, not yet approved: bounded failure diagnostics plus evaluation of a daemon-clock cutoff, tested for skew and evidence failures while retaining exact exec identity/exit checks, limits and cleanup. No blanket retries and no rerun of submitted Java. Original incident cause remains unconfirmed; do not claim a production fix. Publish this investigation branch/PR, then obtain confirmation for the proposed runner change. First usable app integration remains a later proposed task.
+
 ## Loop array-read implementation verified - 2026-10-02
 
 Published implementation commit 99378a4 on feat/loop-array-read and opened [PR #4](https://github.com/KhoaKhoa811/code-visualization/pull/4) against main. The PR is open and unmerged. These publication notes follow in a documentation commit on the same branch. The approved task is complete; discuss the next task before making further changes. The Docker execution-evidence intermittency remains an explicitly recorded follow-up.
