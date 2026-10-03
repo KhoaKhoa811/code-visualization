@@ -2,6 +2,8 @@
 
 ## Conditional compare-and-swap proposal - 2026-10-03
 
+Publication: proposal commit 6597609 pushed; [PR #7](https://github.com/KhoaKhoa811/code-visualization/pull/7) is open against main. These final publication notes follow on the same branch. The documentation task is complete; design approval and contract implementation remain pending. Do not merge or begin implementation automatically. This supersedes the publication-pending checkpoint below.
+
 Confirmed PR #6 merged at a11f81f; the working tree was clean. The read-only review found no frontend/backend application and identified remaining Milestone 1 sorting/aliasing work. Revised the initial app-integration recommendation: complete tracing feasibility before Milestone 2 integration. User then approved a documentation proposal, both memory updates and a documentation PR, not Java/contract implementation.
 
 Created specs/compare-swap-proposal.md and proposed ADR 0009 on docs/compare-swap-proposal from origin/main. Recommend one literal-index array comparison with > and a braced three-statement swap. Two operand reads precede one comparison/branch CONDITION; true path has nine steps, false has four. A branch-local temp retires atomically with the final successful write. Draft-3 assumes loop-condition retirement, so propose separately selected draft-4 with IF role, captured operands/read links, lexical scope and bounded write-associated retirement. Earlier schemas/producers remain unchanged.
