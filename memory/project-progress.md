@@ -2,6 +2,8 @@
 
 ## Draft-4 conditional contract verified - 2026-10-03
 
+Publication: implementation commit 6b9ebcd pushed; [PR #8](https://github.com/KhoaKhoa811/code-visualization/pull/8) is open against main. These final handoff notes follow on the same branch. The approved contract task is complete; the Java producer/collector task still needs confirmation. This supersedes the publication-pending checkpoint below. Do not merge automatically.
+
 User reported merging PR #7 and approved continuing. Fetch confirmed origin/main at 4eac858; created feat/conditional-trace-contract from that merge. Scope is the next contract increment only, not Java instrumentation or app integration.
 
 Added run-result-v4.schema.json, isolated conditional semantic checks, nine designed JSON fixtures with six exact Java source snapshots, and conditional contract/reconstruction self-tests. CONDITION uses IF role, captured typed operands and ordered links to the two preceding accepted reads. All events carry lexical scope; a write can retire one live branch-local int atomically. False conditions do not retire loop bindings. Generic validation checks data consistency; the future source-specific collector must enforce exact branch/swap paths, initializer/write dependencies and final-statement exit placement.
