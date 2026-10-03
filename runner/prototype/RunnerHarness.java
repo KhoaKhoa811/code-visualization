@@ -120,14 +120,40 @@ public final class RunnerHarness {
         long deadline = Math.min(overallDeadline, System.nanoTime() + TimeUnit.SECONDS.toNanos(seconds));
         List<String> argv = new ArrayList<>(List.of("exec", containerId));
         argv.addAll(List.of(program));
-        Command result = command(deadline, seconds, cancel, cause, output, null, argv.toArray(String[]::new));
-        // Separate management channel. Neither console text nor a file writable by Main is evidence.
-        Command evidence = command(deadline, 3, cancel, cause, null, null,
-            "events", "--since=0", "--until=" + Instant.now(), "--filter=type=container",
-            "--filter=container=" + containerId, "--filter=event=exec_create", "--filter=event=exec_die",
-            "--format={{.Actor.ID}}|{{.Action}}|{{.Actor.Attributes.execID}}|{{.Actor.Attributes.exitCode}}");
-        checked(evidence);
-        return ExecEvidence.confirm(containerId, String.join(" ", program), result.exit, evidence.stdout);
+        String phase = "exec", cutoffText = "unavailable", reason = "execution-command-failed";
+        String commandText = String.join(" ", program);
+        Command result = null, evidence = null;
+        try {
+            result = command(deadline, seconds, cancel, cause, output, null, argv.toArray(String[]::new));
+            // Read the daemon's clock after exec. All management work shares the original deadline.
+            phase = "daemon-clock"; reason = "daemon-clock-query-failed";
+            Command clock = command(deadline, 3, cancel, cause, null, null, "info", "--format={{.SystemTime}}");
+            if (clock.exit != 0) throw new IOException("Daemon clock unavailable");
+            reason = "invalid-daemon-clock";
+            String text = clock.stdout.strip();
+            if (text.length() > 40 || !text.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z"))
+                throw new IOException("Invalid daemon clock");
+            Instant cutoff = Instant.parse(text);
+            if (cutoff.getEpochSecond() <= 0) throw new IOException("Invalid daemon clock");
+            cutoffText = cutoff.toString();
+            phase = "events"; reason = "event-query-failed";
+            // Separate management channel. Neither console text nor a file writable by Main is evidence.
+            evidence = command(deadline, 3, cancel, cause, null, null,
+                "events", "--since=0", "--until=" + cutoffText, "--filter=type=container",
+                "--filter=container=" + containerId, "--filter=event=exec_create", "--filter=event=exec_die",
+                "--format={{.Actor.ID}}|{{.Action}}|{{.Actor.Attributes.execID}}|{{.Actor.Attributes.exitCode}}|{{.TimeNano}}");
+            if (evidence.exit != 0) throw new IOException("Event query failed");
+            phase = "confirm"; reason = "invalid-execution-evidence";
+            try { return ExecEvidence.confirmTimed(containerId, commandText, result.exit, evidence.stdout, cutoff); }
+            catch (IOException invalid) { reason = invalid.getMessage(); throw invalid; } // Verifier messages contain fixed text only.
+        } catch (Exception failure) {
+            // Fixed metadata and aggregate counters only: never copy management stderr, source or raw rows.
+            throw new IOException("Execution evidence failure [stage=" + (program[0].equals("javac") ? "compile" : "run")
+                + ", phase=" + phase + ", container=" + containerId + ", daemonCutoff=" + cutoffText
+                + ", cliExit=" + (result == null ? "unavailable" : result.exit)
+                + ", evidenceCliExit=" + (evidence == null ? "unavailable" : evidence.exit) + ", reason=" + reason
+                + ", " + ExecEvidence.describe(containerId, commandText, evidence == null ? null : evidence.stdout) + "]");
+        }
     }
 
     private static void checked(Command result) throws IOException {
@@ -137,6 +163,7 @@ public final class RunnerHarness {
     private Command command(long overallDeadline, int seconds, AtomicBoolean cancel,
             AtomicReference<Outcome> cause, Capture userOutput, byte[] input, String... args) throws Exception {
         if (cancel.get()) cause.compareAndSet(null, Outcome.CANCELLED);
+        if (System.nanoTime() >= overallDeadline) cause.compareAndSet(null, Outcome.TIMEOUT);
         if (cause.get() != null) throw new IOException("Run stopped: " + cause.get());
         long deadline = Math.min(overallDeadline, System.nanoTime() + TimeUnit.SECONDS.toNanos(seconds));
         List<String> argv = new ArrayList<>(List.of("docker"));
