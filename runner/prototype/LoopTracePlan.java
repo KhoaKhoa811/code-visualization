@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /** Phase-aware validation of captured loop facts. Commits state only after an entire valid record. */
-final class LoopTracePlan {
+final class LoopTracePlan implements ArrayTrace.Plan {
     private static final Pattern INT = Pattern.compile("\\{\"type\":\"int\",\"value\":(-?[0-9]{1,10})\\}");
     private final List<ArrayTrace.Operation> sites;
     private int phase;
@@ -28,8 +28,8 @@ final class LoopTracePlan {
             || sites.stream().anyMatch(s -> s.source() == null)) throw new IllegalArgumentException("Invalid loop operation plan");
         for (int n = 0; n < conditionPhase; n++) Objects.requireNonNull(sites.get(n).variableName());
     }
-    boolean complete() { return phase == 6; }
-    void accept(String record, int sequence) {
+    public boolean complete() { return phase == 6; }
+    public void accept(String record, int sequence) {
         if (complete()) throw new IllegalArgumentException("Event after loop exit");
         var site = sites.get(phase);
         String prefix = "{\"sequence\":" + sequence + ",\"kind\":" + ArrayTrace.quote(site.kind()) + ",\"source\":" + site.source() + ",";

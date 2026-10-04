@@ -1,5 +1,33 @@
 # Session handoff
 
+## Conditional recording verified - 2026-10-04
+
+The approved bounded compare-and-swap implementation is complete on feat/conditional-recording, based on merged PR #8 (d3fefdb). It adds separate conditional analysis/lowering, draft-4 recording, source-plan validation and prototype replay. True/false branches produce nine/four observable steps with original-expression highlights; final successful write retires the temporary atomically. No product code changed during October 4 recovery. Guide: runner/analysis/CONDITIONAL_RECORDING.md.
+
+Fresh full runner/analysis/test-recording.ps1 gate passed (exit 0): 328 automatic cases/234 original-generated comparisons (30/22 conditional, 80/48 read loops, 68/40 scalar-fill loops, 150/124 earlier cases), plus seven manual cases/four comparisons. All result contract/source/replay checks, collectors, fixture-delivery tests and worker deadline/output probes passed. New checks include 25 excluded source forms, 38 corrupt records with atomic retries, nine premature endings, 246 final-record truncations and eight delivery rejection cases. Final Docker label inspections found no test containers.
+
+Evidence is ignored locally under runner/analysis/.results/conditional-gate-20261004-1.* (empty stderr; exit 0), with fresh fixtures in .results/fixtures-9e0cef200a104f249c13148377aba607. All seven batches are below 1 MiB; conditional.txt is 529628 bytes. Forty earlier schemas/fixtures/Java sources/recorder templates are byte-identical; nine documents/198 local links/fences, PowerShell syntax and Git whitespace passed. The compatibility helper initially hit sandbox EPERM; its elevated read-only rerun passed. October 3's interrupted full gate was not counted as successful.
+
+Updated the proposal, ADR 0009, Java/trace specifications and guides. Publication: implementation commit d594ff6 pushed on feat/conditional-recording; [PR #9](https://github.com/KhoaKhoa811/code-visualization/pull/9) is open against main. These final publication notes follow on the same branch. The approved task is complete; await review/merge and discussion of the next task. Milestone 1 remains incomplete: nested sorting loops, aliases and broader required syntax/types remain future increments. Spring Boot, frontend and live Scanner integration remain unfinished. Do not merge or begin another task automatically.
+
+## Conditional verification recovery - 2026-10-04
+
+The user requested memory/Git recovery and continuation of the already approved conditional-recording task. No current-file.md exists; memory/current-state.md is the handoff. Git still has the uncommitted implementation on feat/conditional-recording. The October 3 full gate ended after eight conditional cases without a final exit file; no Java/Docker CLI test process remains, so that gate is incomplete, not passed. Its earlier focused 30-case evidence remains recorded separately.
+
+Docker 29.8.0 is available. Initial prototype/analysis label inspections found no leftover containers. Started a fresh full runner/analysis/test-recording.ps1 gate with output/error/exit capture under runner/analysis/.results/conditional-gate-20261004-1.*. This regenerates fixtures and checks all 328 automatic cases plus seven manual cases. No product code changed during recovery. Wait for the exit, then finish documentation, both memories, commit/push and a PR. Do not merge or begin another task.
+
+Checkpoint: the fresh gate has passed all 30 conditional cases/22 comparisons, 80 read-loop cases/48 comparisons and 68 scalar-fill loop cases/40 comparisons, including their source/contract/replay checks. Collector, delivery and worker-limit tests passed. The 150 earlier automatic cases and seven manual cases are still running. Separate delivery checks passed: 40 compatibility files byte-identical, nine documents/198 local links/fences, PowerShell syntax and Git whitespace. Final gate exit and publication remain pending.
+
+## Conditional recording implementation in progress - 2026-10-03
+
+User merged PR #8 and approved the bounded Java conditional implementation. Fetch confirmed origin/main d3fefdb; active branch feat/conditional-recording. Added dedicated conditional analysis facts/lowering, draft-4 recorder additions, phase-aware collector through a small shared ArrayTrace.Plan interface, prototype replay and acceptance/delivery checks. Earlier schemas and recorder templates are unchanged. The implementation guide is runner/analysis/CONDITIONAL_RECORDING.md.
+
+Focused verification passed: 30 isolated analyzer/transformation fixtures with 25 rejected forms; 30 Docker executions and 22 original/generated comparisons; all 30 draft-4/source/replay result checks. Collector checks passed 38 corrupt records with atomic retries, nine premature endings, false-branch rejection, trace byte cap and 246 final-record truncations. An initial trusted collector-test compile used the wrong existing EOF method name; corrected to finish() before these passes. Focused fixture batch: .results/conditional-dev-1/conditional.txt (529628 bytes).
+
+Full recording gate is now active, with fresh workers/fixtures, the new 30 cases, all 298 older automatic cases and seven manual regressions. Logs: runner/analysis/.results/conditional-gate-20261003-1.out.log, .err.log, .exit.txt (written only when finished). Wait for its final exit and resolve any failures before claiming completion or publishing. Eight fixture-delivery rejection cases are included in this gate. No implementation commit or PR yet.
+
+Milestone 1 remains incomplete. Nested sorting loops, aliases and broader required syntax/types remain future increments. No Spring Boot/frontend, interactive Scanner or arbitrary-source execution service was added. Complete only this approved task, update both memories and publish its PR; do not merge or start the next task automatically.
+
 ## Draft-4 conditional contract verified - 2026-10-03
 
 Publication: implementation commit 6b9ebcd pushed; [PR #8](https://github.com/KhoaKhoa811/code-visualization/pull/8) is open against main. These final handoff notes follow on the same branch. The approved contract task is complete; the Java producer/collector task still needs confirmation. This supersedes the publication-pending checkpoint below. Do not merge automatically.

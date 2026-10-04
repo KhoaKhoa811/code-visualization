@@ -17,8 +17,8 @@ import java.util.*;
 public final class ArrayAnalyzer {
     public static final int MAX_NODES = 4096, MAX_DIAGNOSTICS = 16;
     public enum Category { SYNTAX, UNRESOLVED, UNTESTED, ENTRY_CONVENTION, INPUT, LIMIT, TOOL_FAILURE }
-    public enum Completeness { COMPLETE_FOR_ARRAY_PROBE, COMPLETE_FOR_INT_PROBE, COMPLETE_FOR_COMBINED_PROBE, COMPLETE_FOR_LOOP_PROBE, PARTIAL, UNAVAILABLE }
-    public enum ProbeKind { ARRAY, INT_VARIABLE, COMBINED, LOOP }
+    public enum Completeness { COMPLETE_FOR_ARRAY_PROBE, COMPLETE_FOR_INT_PROBE, COMPLETE_FOR_COMBINED_PROBE, COMPLETE_FOR_LOOP_PROBE, COMPLETE_FOR_CONDITIONAL_PROBE, PARTIAL, UNAVAILABLE }
+    public enum ProbeKind { ARRAY, INT_VARIABLE, COMBINED, LOOP, CONDITIONAL }
     public record Diagnostic(Category category, String message, SourceSnapshot.Span span) {}
     public record Scope(String id, String parentId, String kind, SourceSnapshot.Span span) {}
     public record Binding(String id, String name, String type, String scopeId, SourceSnapshot.Span span) {}
@@ -31,7 +31,12 @@ public final class ArrayAnalyzer {
                                  String bindingId, String operator, String resultType) {}
     public record Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write,
                         String bindingId, ProbeKind kind, SourceSnapshot.Span arrayDeclaration, String arrayBindingId,
-                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment, LoopProbe.Facts loop) {
+                        SourceSnapshot.Span scalarReference, SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment, LoopProbe.Facts loop, ConditionalProbe.Facts conditional) {
+        public Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write, String bindingId, ProbeKind kind,
+                     SourceSnapshot.Span arrayDeclaration, String arrayBindingId, SourceSnapshot.Span scalarReference,
+                     SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment, LoopProbe.Facts loop) {
+            this(declaration, read, write, bindingId, kind, arrayDeclaration, arrayBindingId, scalarReference, scalarWrite, scalarWriteBindingId, index, addition, increment, loop, null);
+        }
         public Sites(SourceSnapshot.Span declaration, SourceSnapshot.Span read, SourceSnapshot.Span write, String bindingId, ProbeKind kind,
                      SourceSnapshot.Span arrayDeclaration, String arrayBindingId, SourceSnapshot.Span scalarReference,
                      SourceSnapshot.Span scalarWrite, String scalarWriteBindingId, IndexSites index, AdditionSites addition, IncrementSites increment) {
@@ -192,7 +197,8 @@ public final class ArrayAnalyzer {
         Completeness complete = diagnostics.values.isEmpty()
             ? sites.kind() == ProbeKind.ARRAY ? Completeness.COMPLETE_FOR_ARRAY_PROBE
                 : sites.kind() == ProbeKind.COMBINED ? Completeness.COMPLETE_FOR_COMBINED_PROBE
-                : sites.kind() == ProbeKind.LOOP ? Completeness.COMPLETE_FOR_LOOP_PROBE : Completeness.COMPLETE_FOR_INT_PROBE
+                : sites.kind() == ProbeKind.LOOP ? Completeness.COMPLETE_FOR_LOOP_PROBE
+                : sites.kind() == ProbeKind.CONDITIONAL ? Completeness.COMPLETE_FOR_CONDITIONAL_PROBE : Completeness.COMPLETE_FOR_INT_PROBE
             : Completeness.PARTIAL;
         return new Result(source, unit, bindings, scopes, accesses, diagnostics.values, entry,
             diagnostics.values.isEmpty() ? sites : null, complete);
@@ -228,6 +234,8 @@ public final class ArrayAnalyzer {
         if (!method.getAnnotations().isEmpty() || !method.getTypeParameters().isEmpty()
             || method.getModifiers().size() != 2 || !method.getParameter(0).getAnnotations().isEmpty()) return null;
         NodeList<Statement> statements = method.getBody().orElseThrow().getStatements();
+        if ((statements.size() == 2 || statements.size() == 4) && statements.get(1).isIfStmt())
+            return ConditionalProbe.sites(source, statements, bindings, targets);
         if ((statements.size() == 2 || statements.size() == 4) && statements.get(1).isForStmt())
             return LoopProbe.sites(source, statements, bindings, targets);
         if ((statements.size() == 3 || statements.size() == 5) && statements.get(2).isForStmt())

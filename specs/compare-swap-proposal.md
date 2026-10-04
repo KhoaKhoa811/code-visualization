@@ -1,6 +1,6 @@
 # Conditional array compare-and-swap tracing
 
-Status: proposed and approved 2026-10-03 after PR #7 merged. The separately approved contract increment is now implemented and verified; see [contract status](../contracts/README.md). Java analysis/instrumentation/recording implementation remains unapproved and unfinished. Milestone 1 remains incomplete. Proposed wording below records the design that led to this contract.
+Status: design and contract approved, with runtime implementation approved after PR #8 merged. The bounded analyzer, instrumentation, recorder, source-plan collector and replay are implemented; current verification is recorded in the [runtime guide](../runner/analysis/CONDITIONAL_RECORDING.md). See also [contract status](../contracts/README.md). Milestone 1 remains incomplete. Proposed wording below records the design that led to these increments.
 
 ## Purpose and bounded source
 

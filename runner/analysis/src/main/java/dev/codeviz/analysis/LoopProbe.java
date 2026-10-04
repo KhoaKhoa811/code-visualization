@@ -71,22 +71,22 @@ public final class LoopProbe {
             return new ArrayAnalyzer.Sites(null, null, null, null, ArrayAnalyzer.ProbeKind.LOOP, null, null, null, null, null, null, null, null, facts);
         } catch (RuntimeException outsideShape) { return null; }
     }
-    private static VariableDeclarationExpr declaration(Expression expression, String type) {
+    static VariableDeclarationExpr declaration(Expression expression, String type) {
         var d = expression.asVariableDeclarationExpr();
         if (d.getVariables().size() != 1 || !d.getModifiers().isEmpty() || !d.getAnnotations().isEmpty()
             || !d.getVariable(0).getType().asString().equals(type)) throw new IllegalArgumentException("Declaration shape");
         return d;
     }
-    private static ArrayAnalyzer.Binding binding(SourceSnapshot source, List<ArrayAnalyzer.Binding> bindings, VariableDeclarator v) {
+    static ArrayAnalyzer.Binding binding(SourceSnapshot source, List<ArrayAnalyzer.Binding> bindings, VariableDeclarator v) {
         return bindings.stream().filter(b -> b.span().equals(span(source, v)) && b.scopeId() != null
             && b.name().equals(v.getNameAsString()) && b.type().equals(v.getType().asString())).findFirst().orElseThrow();
     }
-    private static boolean reference(Expression expression, VariableDeclarator v, String type) {
+    static boolean reference(Expression expression, VariableDeclarator v, String type) {
         var resolved = expression.asNameExpr().resolve();
         return resolved instanceof JavaParserVariableDeclaration local && local.getVariableDeclarator().getRange().equals(v.getRange())
             && resolved.getType().describe().equals(type);
     }
-    private static boolean probes(NodeList<Statement> statements, VariableDeclarator x, VariableDeclarator a, List<ArrayAnalyzer.Binding> bindings) {
+    static boolean probes(NodeList<Statement> statements, VariableDeclarator x, VariableDeclarator a, List<ArrayAnalyzer.Binding> bindings) {
         if (bindings.stream().anyMatch(b -> b.name().equals("java") || b.name().equals("System"))) return false;
         var printer = new PrettyPrinterConfiguration().setPrintComments(false).setPrintJavadoc(false);
         int probe = x == null ? 2 : 3;
