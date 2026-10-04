@@ -1,5 +1,7 @@
 # Execution Isolation and Runner Prototype
 
+2026-10-04 proposal only: [the first bubble-sort trace](bubble-sort-proposal.md) needs more than the current 32 events to finish its reverse three-element example (41 events). It proposes a separately approved sorting-only 128-event profile with unchanged 64-KiB trace/source caps and all existing isolation limits. No limit changes are implemented by this documentation task; old producers retain their current profile. Runtime acceptance must prove the small examples fit both byte and event bounds and longer runs stop safely.
+
 Status: Design draft with a bounded prototype, updated 2026-09-21. The approved [runner harness](../runner/prototype/README.md) implements the initial limits for controlled fixtures. Seven compilation/execution, timeout, cancellation, bounded-output, heap-exhaustion, and cleanup cases passed. This validates only the stated cases, not all safeguards or the full verification gates below. Numerical defaults remain prototype candidates.
 
 ## Scope and Requirements
