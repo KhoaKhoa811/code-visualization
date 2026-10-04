@@ -29,11 +29,12 @@ final class ArrayTrace {
     private int bytes;
     private boolean ended, eof, sealed;
     private String problem = "";
-    private LoopTracePlan loop;
+    interface Plan { boolean complete(); void accept(String record, int sequence); }
+    private Plan plan;
 
-    ArrayTrace(LoopTracePlan loop) {
+    ArrayTrace(Plan plan) {
         this(Map.of(), "");
-        this.loop = Objects.requireNonNull(loop);
+        this.plan = Objects.requireNonNull(plan);
     }
 
     ArrayTrace(Map<String, String> sources) { this(sources, "values"); }
@@ -101,15 +102,15 @@ final class ArrayTrace {
 
     private void record(String record) {
         if (record.equals("{\"transport\":\"end\"}")) {
-            if (loop != null && !loop.complete()) { fail(Failure.INVALID, "Premature loop completion"); return; }
+            if (plan != null && !plan.complete()) { fail(Failure.INVALID, "Premature operation-plan completion"); return; }
             if (combined && events.size() != operationOrder.size()) { fail(Failure.INVALID, "Premature combined completion"); return; }
             ended = true; return;
         }
         if (record.equals("{\"transport\":\"limit\"}")) { fail(Failure.LIMIT, "Recorder event/byte/array limit"); return; }
         if (events.size() >= EVENT_LIMIT) { fail(Failure.LIMIT, "Collector event limit"); return; }
         try {
-            if (loop != null) {
-                loop.accept(record, events.size() + 1);
+            if (plan != null) {
+                plan.accept(record, events.size() + 1);
                 events.add(record);
                 return;
             }

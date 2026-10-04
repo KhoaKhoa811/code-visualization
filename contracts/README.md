@@ -1,5 +1,7 @@
 # Draft Contract Validation
 
+2026-10-04 runtime follow-up: the separately approved [conditional producer and source-plan collector](../runner/analysis/CONDITIONAL_RECORDING.md) now produce and validate real Java traces for the bounded swap. The collector checks exact branch paths, initializer/store dependencies and final-write retirement. Thirty runtime results passed draft-4 and source/replay checks; the guide records full regression status. No schema or designed fixture changed in this runtime increment. The contract-only status below describes the earlier task.
+
 ## Draft-4 conditional contract - 2026-10-03
 
 [run-result-v4.schema.json](run-result-v4.schema.json) implements the approved [conditional comparison design](../specs/compare-swap-proposal.md) at the contract layer only. Each event carries lexical scope and an exit list. CONDITION requires IF role, typed int operands, ordered links to the preceding two accepted ARRAY_READ events and a real boolean result. False does not retire a loop index. An ARRAY_WRITE may atomically retire one live branch-local int binding in its own scope; complete coverage cannot leave that declared branch binding live. Rejected events commit neither mutation nor retirement.
