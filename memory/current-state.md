@@ -1,5 +1,15 @@
 # Session handoff
 
+## Bubble-sort design proposal - 2026-10-04
+
+User reported PR #9 merged and approved a documentation-only design for the first complete bubble-sort example. Fetch confirmed origin/main a9f2af4 includes handoff 1c41c57; clean branch docs/bubble-sort-proposal starts there. No runtime, schema, dependency or limit change is authorized by this task.
+
+Added specs/bubble-sort-proposal.md and proposed ADR 0010. The design composes two zero-based classic loops with variable-index conditional swaps, 15 static source sites and an expected 41-event reverse three-element trace. Proposed draft-5 distinguishes FOR/IF conditions, lexical scopes and runtime scope instances/parents, static declaration identities and fresh dynamic binding IDs. Repeated j/temp lifetimes cannot reuse retired IDs. Scope/binding exits stay atomic with existing observable operations. Separate source-plan validation and recorded-prefix replay remain required.
+
+Proposed sorting-only cap: 128 events with unchanged 64-KiB trace/source, 16-element and execution-isolation limits; existing producers retain 32 events. These are design choices awaiting review, not implemented settings. Acceptance covers all four prefix/postfix combinations, complete small examples, limited larger arrays, exact highlights, all prefix/backward states, dynamic lifetime rejection and existing regression retention. Milestone 1 remains incomplete; aliasing, broader syntax/side effects and browser integration remain later work.
+
+Updated Java-support, trace-format and execution-isolation notes. Documentation checks passed: seven files, 170 local links, balanced fences, 15 designed sites, canonical intermediate checkpoints and seven event-count cases. Git whitespace passed; the runner/contracts/frontend/backend diff is empty. These arithmetic checks are design expectations, not runtime evidence. No Java, Docker or browser tests were run for sorting. Publication: design commit 8002049 pushed; [PR #10](https://github.com/KhoaKhoa811/code-visualization/pull/10) is open against main. These publication notes follow on the same branch. The approved documentation task is complete. Next task recommendation is separately approved draft-5 contract/fixture work after design review. Do not implement or merge automatically.
+
 ## Conditional recording verified - 2026-10-04
 
 The approved bounded compare-and-swap implementation is complete on feat/conditional-recording, based on merged PR #8 (d3fefdb). It adds separate conditional analysis/lowering, draft-4 recording, source-plan validation and prototype replay. True/false branches produce nine/four observable steps with original-expression highlights; final successful write retires the temporary atomically. No product code changed during October 4 recovery. Guide: runner/analysis/CONDITIONAL_RECORDING.md.
