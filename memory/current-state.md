@@ -4,7 +4,9 @@ Updated 2026-10-05. This file is the active checkpoint, not a chronological log.
 
 ## Current task
 
-The user merged PR #11 and approved reviewing/refactoring stale documentation before implementation. Branch: docs/requirements-alignment, based on merged main 4f77bba. This task changes documentation only. Documentation checks passed. Cleanup commit 6db0b85 is pushed; [PR #12](https://github.com/KhoaKhoa811/code-visualization/pull/12) is open against main. The approved cleanup task is complete; these final publication notes follow on the same branch. Do not start another task or merge automatically.
+The user expanded the cleanup to all files, including runner code: keep/refactor useful components and remove confirmed obsolete files. This continues on docs/requirements-alignment in open PR #12. Reviewed all 175 tracked files at 424319e. Retained active source, schemas, fixtures, legacy compatibility tests and documented diagnostics. Extracted shared loop/conditional replay state reconstruction with unchanged adapters; added a compatibility test to both PowerShell gates. Removed only two redundant runner-local .gitignore files; root patterns preserve exclusions.
+
+Before/after contract checks and all 178 affected captured-result checks passed (30 conditional, 68 loop, 80 read-loop), plus adapter error/shape/mutation/retirement tests and PowerShell syntax. These reuse October 4 traces; no new Java/Docker execution or language support is claimed. Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Publication update is pending. Do not start another task or merge automatically.
 
 ## Product direction
 
@@ -17,7 +19,7 @@ The user merged PR #11 and approved reviewing/refactoring stale documentation be
 
 Milestone 1 is active and incomplete. Existing shape-specific analyzers/transformers, Docker runner, draft-1 through draft-4 collectors and prototype replay are verified only for their documented coverage. No Spring Boot/frontend application integration exists.
 
-Latest full gate: October 4, 2026, exit 0; 328 automatic cases/234 original-generated comparisons and seven manual cases/four comparisons. Source/hash/replay, collectors, fixture delivery, worker limits and cleanup passed. See [conditional guide](../runner/analysis/CONDITIONAL_RECORDING.md). This documentation task does not rerun or extend that evidence.
+Latest full gate: October 4, 2026, exit 0; 328 automatic cases/234 original-generated comparisons and seven manual cases/four comparisons. Source/hash/replay, collectors, fixture delivery, worker limits and cleanup passed. See [conditional guide](../runner/analysis/CONDITIONAL_RECORDING.md). The cleanup reruns affected replay checks on those captures, not the full Java execution gate.
 
 PR #9 implemented conditional swaps; PR #10 proposed bubble-sort composition; PR #11 adopted the revised [composable tracing direction](../specs/composable-java-tracing.md). All three are merged. Draft-5, composable analysis/runtime and the previously proposed larger event budget are not implemented. Existing producers retain their current limits.
 
@@ -31,4 +33,6 @@ Later tasks add lowering/runtime, blocks/conditions, loops and method/frame/refe
 
 Discuss and obtain confirmation before new work. Each approved task updates this file and project-progress.md, commits/pushes its branch, and creates or updates its PR. Do not merge PRs. Preserve unrelated changes, exact source bytes and old schemas/fixtures; keep generated artifacts out of Git.
 
-Documentation cleanup findings are in [the alignment review](../specs/documentation-alignment-review.md). Verified 62 Markdown files, 518 local links, balanced fences and Git whitespace. The archive blob exactly matches the prior main handoff (1b715637aed2ad37ff8c43692350b90706253840). All changed files are Markdown; no runtime checks ran.
+Documentation cleanup findings are in [the alignment review](../specs/documentation-alignment-review.md). Verified 62 Markdown files, 518 local links, balanced fences and Git whitespace. The archive blob exactly matches the prior main handoff (1b715637aed2ad37ff8c43692350b90706253840). That first cleanup portion changed only Markdown; the runner extension above separately verifies replay behavior.
+
+See [repository file review](../specs/repository-file-review.md) for every keep/refactor/remove decision. Earlier documentation cleanup commits were 6db0b85 and 424319e; the runner extension will update the same PR #12.

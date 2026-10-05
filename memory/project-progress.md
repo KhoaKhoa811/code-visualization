@@ -1,5 +1,15 @@
 # Project progress and development record
 
+## Whole-repository cleanup extension - 2026-10-05
+
+User expanded the open PR #12 cleanup to every file, including runner code. Applied safe-refactor with pre/post verification. Inventoried all 175 tracked files at 424319e and recorded individual keep/refactor/remove decisions in specs/repository-file-review.md. Active Java source, schema versions, fixtures, manual baselines and documented Docker diagnostic remain useful; no obsolete application module was confirmed.
+
+Extracted common validated-prefix mutation/retirement reconstruction into runner/prototype/recording/replay-state.mjs. Kept loop-replay.mjs and conditional-replay.mjs as adapters with unchanged error messages and output shapes, including omitted versus null read details. Added test-replay.mjs and wired it into both PowerShell gates. Removed runner/analysis/.gitignore and runner/prototype/.gitignore because root patterns cover all entries; before/after ignore checks passed. Ignored caches/results are retained, not shipped.
+
+Pre/post contract self-tests and 178 captured-result/source/hash/replay checks passed (30 conditional, 68 loop, 80 read-loop), with all forward/backward prefixes. Adapter checks passed against old/new implementations; PowerShell syntax passed. The initial sandboxed baseline could not spawn Node (EPERM); elevated baseline and postchecks passed. Existing October 4 captures were reused; no Java/Docker/browser run or new language coverage is claimed. Shared runtime Java, schemas, recorder templates and limits are unchanged.
+
+Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Commit/push/PR update is pending. Keep the composable analyzer as the next separately approved task; do not implement it or merge automatically.
+
 ## Documentation alignment - 2026-10-05
 
 User merged PR #11; fetch confirmed main 4f77bba. Approved documentation cleanup on docs/requirements-alignment before any new implementation. Corrected template wording and recorded-playback status, adopted-direction versus implementation status, obsolete parser/setup and future-collector statements, and stale analysis-guide next steps. Added root navigation and specs/documentation-alignment-review.md. Role definitions and narrow historical experiment semantics remain valid and unchanged.

@@ -19,3 +19,5 @@ The adopted direction is [composable Java tracing](specs/composable-java-tracing
 5. [Progress history](memory/project-progress.md): dated evidence and prior decisions. Historical next steps are not current instructions.
 
 Follow [AGENTS.md](AGENTS.md). New implementation work requires explicit user approval. Older experiment specifications intentionally preserve their narrow eligibility and historical verification; consult current status before applying their former next steps.
+
+The [repository file review](specs/repository-file-review.md) records keep/refactor/remove decisions for the runner and other tracked files. Legacy tests remain compatibility evidence until their replacements are verified.
