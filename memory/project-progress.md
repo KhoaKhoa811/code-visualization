@@ -6,7 +6,7 @@ User merged PR #11; fetch confirmed main 4f77bba. Approved documentation cleanup
 
 Replaced the 715-line current-state.md with a concise active checkpoint. Preserved its exact prior bytes as memory/current-state-history-20261005.md; this progress file remains the chronological record. The next proposed task is still separately approved composable analysis, not sorting-specific draft-5. No code, schema, dependency, limit or product scope changed.
 
-Checks passed: 62 Markdown files, 518 local links, balanced fences, Git whitespace and archive blob equality against main (1b715637aed2ad37ff8c43692350b90706253840). All changed files are Markdown. No Java, Docker or browser tests ran. Publication is pending; complete checks, commit/push/open this documentation PR, then record its commit/link in both active memory files. Do not start implementation or merge automatically.
+Checks passed: 62 Markdown files, 518 local links, balanced fences, Git whitespace and archive blob equality against main (1b715637aed2ad37ff8c43692350b90706253840). All changed files are Markdown. No Java, Docker or browser tests ran. Publication: cleanup commit 6db0b85 pushed; [PR #12](https://github.com/KhoaKhoa811/code-visualization/pull/12) is open against main. The approved cleanup is complete; final publication notes follow on the same branch. Do not start implementation or merge automatically.
 
 ## Composable Java tracing review - 2026-10-05
 

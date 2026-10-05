@@ -4,7 +4,7 @@ Updated 2026-10-05. This file is the active checkpoint, not a chronological log.
 
 ## Current task
 
-The user merged PR #11 and approved reviewing/refactoring stale documentation before implementation. Branch: docs/requirements-alignment, based on merged main 4f77bba. This task changes documentation only. Documentation checks passed; publication is pending. Do not start another task or merge automatically.
+The user merged PR #11 and approved reviewing/refactoring stale documentation before implementation. Branch: docs/requirements-alignment, based on merged main 4f77bba. This task changes documentation only. Documentation checks passed. Cleanup commit 6db0b85 is pushed; [PR #12](https://github.com/KhoaKhoa811/code-visualization/pull/12) is open against main. The approved cleanup task is complete; these final publication notes follow on the same branch. Do not start another task or merge automatically.
 
 ## Product direction
 
