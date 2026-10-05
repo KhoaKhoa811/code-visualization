@@ -1,5 +1,7 @@
 # Java Code Visualization Architecture
 
+2026-10-04 design review: [composable Java tracing](composable-java-tracing.md) proposes recursive capability analysis and composed statement/expression lowering, with algorithms as acceptance programs rather than eligibility templates. [ADR 0011](decisions/0011-composable-java-tracing.md) preserves existing module boundaries and legacy evidence while pausing the sorting-specific draft-5 sequence. This is an implementation-direction proposal, not evidence of general Java tracing or authorization to build it.
+
 ## 1. Purpose and status
 
 This document describes the intended application design. It is not an agent definition or evidence of implemented functionality. The source of product intent is [PROJECT_REQUIREMENTS.md](../requirements/PROJECT_REQUIREMENTS.md); repository working rules are in [AGENTS.md](../AGENTS.md).

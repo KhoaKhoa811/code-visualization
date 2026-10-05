@@ -1,5 +1,7 @@
 # First complete bubble-sort trace
 
+2026-10-04 superseding review: the user clarified that tracing should handle differently written supported Java rather than exact algorithm templates. The [composable-Java review](composable-java-tracing.md) and [ADR 0011](decisions/0011-composable-java-tracing.md) replace this proposal's immediate draft-5/sorting-specific implementation sequence. Keep the source and calculated checkpoints below as acceptance material. Dedicated sorting facts/plans, exact-body eligibility and the sorting-only budget are historical proposals, not the recommended general design. No draft-5 or sorting runtime has been implemented.
+
 Status: design proposal, 2026-10-04. The user approved reviewing merged PR #9 and preparing this documentation, not a schema change or runtime implementation. Milestone 1 remains incomplete. Proposed decisions below require review before implementation.
 
 ## Purpose and existing evidence
