@@ -1,5 +1,17 @@
 # Project progress and development record
 
+## Composable Java tracing review - 2026-10-05
+
+Recovered the October 4 uncommitted documentation task on docs/composable-java-tracing. PR #10 is merged; origin/main remains c649980. The user clarified that differently written supported Java should be visualizable without an algorithm-specific template, then approved the review and its continuation. No product-code changes or new tests were lost; the design files were intact, but the previous memory entry still pointed to the old draft-5 next step.
+
+Added specs/composable-java-tracing.md and proposed ADR 0011. Review found fixed statement-position/count eligibility, fixed loop/swap collector phases, and draft-4 assumptions about two preceding reads and one temporary retired at a write. Recommend recursive typed statement/expression capability analysis, composed lowering and source-plan validation, while reusing source mapping, Docker isolation, transport and recorded-fact replay. Algorithms become acceptance programs. Arbitrary Java and immediate quicksort support are not promised.
+
+Superseded the immediate bubble-sort-specific draft-5 sequence in the proposal/ADR and architecture, Java, trace and isolation notes. Preserve PR #10's source/checkpoints as acceptance material, existing runtime behavior and all V1 requirements. No schema/limit change is active. Revisit general capture dependencies, enclosing-local writes, scope/frame lifetimes, atomic bookkeeping and capability-based budgets before new runtime production.
+
+Next proposed task, requiring separate approval: implement a new composable analysis result for supported int/int[] declarations, plain assignments, parentheses, int addition/subtraction, array length and nested array reads in any supported sequence. Keep legacy probes and runtime paths unchanged. Then add lowering/runtime and control-flow capabilities through separately verified increments. Methods/recursion, aliases and remaining Milestone 1/V1 work stay required.
+
+Documentation checks passed: 10 files, 198 local links, balanced fences, source/spec/role consistency and Git whitespace. The runner/contracts/frontend/backend diff is empty. No Java, Docker or browser tests ran; no new tracing coverage is claimed. Publication is pending: commit/push/open the review PR, then record its commit/link in both memory files. Do not start implementation or merge automatically.
+
 ## Bubble-sort design proposal - 2026-10-04
 
 User reported PR #9 merged and approved a documentation-only design for the first complete bubble-sort example. Fetch confirmed origin/main a9f2af4 includes handoff 1c41c57; clean branch docs/bubble-sort-proposal starts there. No runtime, schema, dependency or limit change is authorized by this task.

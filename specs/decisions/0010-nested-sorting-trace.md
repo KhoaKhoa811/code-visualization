@@ -1,5 +1,7 @@
 # ADR 0010: Nested sorting conditions and runtime lifetimes
 
+2026-10-04 supersession: [ADR 0011](0011-composable-java-tracing.md) pauses this proposal's draft-5 implementation sequence and replaces sorting-specific facts/plans/budget selection with a composable Java capability direction. Runtime identity distinctions and bubble-sort acceptance checkpoints remain useful; the fields below are not a frozen general contract. No implementation was delivered under this ADR.
+
 Status: proposed, 2026-10-04. Documentation approved after PR #9 merged; contract/runtime implementation requires separate confirmation.
 
 The first complete [bubble-sort example](../bubble-sort-proposal.md) combines nested classic loops with repeated conditional swaps. Existing draft-3 loop and draft-4 IF contracts cannot express this composition without changing their meanings. A static declaration/source site also cannot identify successive j or temp lifetimes.
