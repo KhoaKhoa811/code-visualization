@@ -10,7 +10,7 @@ Superseded the immediate bubble-sort-specific draft-5 sequence in the proposal/A
 
 Next proposed task, requiring separate approval: implement a new composable analysis result for supported int/int[] declarations, plain assignments, parentheses, int addition/subtraction, array length and nested array reads in any supported sequence. Keep legacy probes and runtime paths unchanged. Then add lowering/runtime and control-flow capabilities through separately verified increments. Methods/recursion, aliases and remaining Milestone 1/V1 work stay required.
 
-Documentation checks passed: 10 files, 198 local links, balanced fences, source/spec/role consistency and Git whitespace. The runner/contracts/frontend/backend diff is empty. No Java, Docker or browser tests ran; no new tracing coverage is claimed. Publication is pending: commit/push/open the review PR, then record its commit/link in both memory files. Do not start implementation or merge automatically.
+Documentation checks passed: 10 files, 198 local links, balanced fences, source/spec/role consistency and Git whitespace. The runner/contracts/frontend/backend diff is empty. No Java, Docker or browser tests ran; no new tracing coverage is claimed. Publication: review commit 61b6e54 pushed; [PR #11](https://github.com/KhoaKhoa811/code-visualization/pull/11) is open against main. These publication notes follow on the same branch. The approved documentation task is complete; await review and separate implementation approval. Do not start implementation or merge automatically.
 
 ## Bubble-sort design proposal - 2026-10-04
 
