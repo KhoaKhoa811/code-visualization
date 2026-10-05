@@ -8,7 +8,7 @@ Extracted common validated-prefix mutation/retirement reconstruction into runner
 
 Pre/post contract self-tests and 178 captured-result/source/hash/replay checks passed (30 conditional, 68 loop, 80 read-loop), with all forward/backward prefixes. Adapter checks passed against old/new implementations; PowerShell syntax passed. The initial sandboxed baseline could not spawn Node (EPERM); elevated baseline and postchecks passed. Existing October 4 captures were reused; no Java/Docker/browser run or new language coverage is claimed. Shared runtime Java, schemas, recorder templates and limits are unchanged.
 
-Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Commit/push/PR update is pending. Keep the composable analyzer as the next separately approved task; do not implement it or merge automatically.
+Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Publication: runner cleanup commit 81974f0 pushed; PR #12 title/body updated to include the repository review and verified replay refactor. The approved cleanup is complete; final handoff notes follow on the same branch. Keep the composable analyzer as the next separately approved task; do not implement it or merge automatically.
 
 ## Documentation alignment - 2026-10-05
 

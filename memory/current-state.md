@@ -6,7 +6,7 @@ Updated 2026-10-05. This file is the active checkpoint, not a chronological log.
 
 The user expanded the cleanup to all files, including runner code: keep/refactor useful components and remove confirmed obsolete files. This continues on docs/requirements-alignment in open PR #12. Reviewed all 175 tracked files at 424319e. Retained active source, schemas, fixtures, legacy compatibility tests and documented diagnostics. Extracted shared loop/conditional replay state reconstruction with unchanged adapters; added a compatibility test to both PowerShell gates. Removed only two redundant runner-local .gitignore files; root patterns preserve exclusions.
 
-Before/after contract checks and all 178 affected captured-result checks passed (30 conditional, 68 loop, 80 read-loop), plus adapter error/shape/mutation/retirement tests and PowerShell syntax. These reuse October 4 traces; no new Java/Docker execution or language support is claimed. Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Publication update is pending. Do not start another task or merge automatically.
+Before/after contract checks and all 178 affected captured-result checks passed (30 conditional, 68 loop, 80 read-loop), plus adapter error/shape/mutation/retirement tests and PowerShell syntax. These reuse October 4 traces; no new Java/Docker execution or language support is claimed. Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Publication: runner cleanup commit 81974f0 is pushed and PR #12 is updated with the full scope. The approved cleanup is complete; final handoff notes follow on the same branch. Do not start another task or merge automatically.
 
 ## Product direction
 
@@ -35,4 +35,4 @@ Discuss and obtain confirmation before new work. Each approved task updates this
 
 Documentation cleanup findings are in [the alignment review](../specs/documentation-alignment-review.md). Verified 62 Markdown files, 518 local links, balanced fences and Git whitespace. The archive blob exactly matches the prior main handoff (1b715637aed2ad37ff8c43692350b90706253840). That first cleanup portion changed only Markdown; the runner extension above separately verifies replay behavior.
 
-See [repository file review](../specs/repository-file-review.md) for every keep/refactor/remove decision. Earlier documentation cleanup commits were 6db0b85 and 424319e; the runner extension will update the same PR #12.
+See [repository file review](../specs/repository-file-review.md) for every keep/refactor/remove decision. Earlier documentation cleanup commits were 6db0b85 and 424319e; the runner extension is published in the same PR #12.
