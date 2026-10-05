@@ -6,7 +6,7 @@
 
 This document describes the intended application design. It is not an agent definition or evidence of implemented functionality. The source of product intent is [PROJECT_REQUIREMENTS.md](../requirements/PROJECT_REQUIREMENTS.md); repository working rules are in [AGENTS.md](../AGENTS.md).
 
-Status: initial architecture proposal for Milestone 0. Confirmed product decisions below are requirements. Detailed implementation choices remain proposed until specified and verified. Creating this document does not complete Milestone 0 or authorize implementation of later milestones.
+Status: intended application architecture with a bounded Milestone 1 runner/trace prototype. Confirmed product decisions below are requirements; detailed unimplemented choices remain proposals. The composable tracing direction was adopted through merged PR #11, but its new analyzer/runtime path is not implemented. Consult [current state](../memory/current-state.md) for the active task and verified scope; open specification work does not mean restarting repository setup.
 
 The product helps Java beginners and algorithm students understand execution through synchronized code and diagrams. V1 runs locally on Windows. Correct variables and arrays come first, followed by collections and tree/heap sorting. There is no fixed deadline.
 
@@ -22,11 +22,11 @@ The product helps Java beginners and algorithm students understand execution thr
 | Live console | Confirmed | Incremental stdout/stderr and line input to supported `Scanner` reads during Run; diagram playback after termination |
 | Full V1 structures | Confirmed | Variables, arrays, lists, stacks, queues, maps, binary-search-tree sort, and heap sort |
 | Editor and playback implementation | Proposed | Monaco Editor, deterministic state reducer, renderer registry |
-| Trace engine | Proposed | Java-aware analysis and source instrumentation, validated by a feasibility prototype |
+| Trace engine | Bounded prototypes verified; composable path pending | Java-aware analysis and source instrumentation; construct-based expansion under ADR 0011 |
 | Parser/resolver | Narrow analysis and transformation verified | JavaParser + JavaSymbolSolver 3.28.2; Java 21, bounded array analysis/automatic recording and Docker tests under [ADR 0005](decisions/0005-javaparser-prototype-candidate.md); broader coverage pending |
 | Recorded playback behavior | Confirmed | Playback after run termination using available validated traces, including partial results |
-| Trace delivery implementation | Unresolved | Worker trace transport, wire schemas, collection/retention details, and concrete bounds require specification and prototype validation |
-| Toolchain and wire formats | Unresolved | Pin versions and finalize schemas during setup/specification |
+| Trace delivery implementation | Bounded prototype verified | Private FIFO transport, bounded collection and draft-1 through draft-4; production delivery, new lifetime/grouping semantics and API integration remain unfinished |
+| Toolchain and wire formats | Partially established | Java/Maven/parser prototype pins and draft-1 through draft-4 exist; application dependencies and future contracts need separate setup/specification |
 
 Accounts, databases, cloud persistence, collaboration, AI explanations, arbitrary dependencies, and public deployment are outside initial implementation scope. Trace recording does not require a distributed event-sourcing platform.
 

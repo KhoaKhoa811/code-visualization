@@ -13,10 +13,13 @@ The audience includes Java beginners and algorithm students. The primary learnin
 ## 2. Requirement status
 
 - **Confirmed:** Java-only V1; TypeScript, React, Vite, TanStack Query, Axios, and TanStack Router frontend; Java, Spring Boot, and Maven backend; Docker execution; code visualization, variables, arrays, lists, stacks, queues, maps, trees, heaps, and extensibility.
-- **Proposed baseline:** Monaco Editor, source instrumentation, recorded trace playback, and the repository organization below.
-- **Needs technical validation:** parser choice, instrumentation implementation, exact Java subset, library operation coverage, and tree/heap representation.
+- **Confirmed playback behavior:** recorded diagram playback after execution terminates, using available validated facts.
+- **Implementation baseline:** Monaco remains proposed; bounded source instrumentation and JavaParser/SymbolSolver are verified in the prototype. This does not establish general Java tracing or application integration.
+- **Needs technical validation:** composable language coverage, broader instrumentation, library operation coverage, and tree/heap representation.
 
 ### Confirmed clarification decisions
+
+- On 2026-10-04/05, the user clarified that differently written supported Java must not depend on recognizing an exact algorithm template, and merged the [composable tracing review](../specs/composable-java-tracing.md) in PR #11. Build coverage around statements, expressions and verified combinations; use bubble sort, quicksort and other programs as acceptance examples. This does not promise arbitrary Java or immediate quicksort support. Detailed implementation still requires approval.
 
 - On 2026-09-22, the user confirmed finishing the existing V1 scope before implementing V2. V2 broadens visualization for Java solutions to array, string, map, set, tree, and heap problems, including the coverage gaps identified in the requirements review. Existing V1 array/string/collection requirements, tree sort, heap sort, methods/recursion, and live Scanner input remain unchanged. See Section 15 for the V2 roadmap; exact operations and acceptance cases require specification before implementation.
 - Both V1 and V2 retain Main.java with Main.main. A separate test-input workflow is a V2 feature and still runs Main.java; this does not select a solution-class invocation model. V1 interactive Scanner input remains required. Input format, case management, and delivery semantics for V2 remain to be designed.
@@ -28,7 +31,7 @@ The audience includes Java beginners and algorithm students. The primary learnin
 - V1 includes live console input through a documented subset of `Scanner` over `System.in`. Output appears during execution; the user types a line and presses Enter to send it to the running program. Diagram playback begins after execution terminates, using the available recorded trace. Replay must not request input again.
 - Java 21 is the backend and runner JDK target. The user's earlier reference to "React 22" meant Node.js 22. On 2026-09-15, local `node --version` returned `v22.23.2`; retain it for initial setup. React and React DOM must use matching 19.3 patch versions with Vite 8. These are selected version lines, not an installed or tested dependency set. See the compatibility references in `specs/architecture.md`.
 - The frontend/backend stack above was confirmed on 2026-09-15. Axios provides HTTP transport; TanStack Query manages server request state and caching; TanStack Router handles navigation. Keep execution playback state separate from server state. Styling, diagram-rendering tools, testing tools, and exact versions remain undecided. Stack selection does not imply installed dependencies or verified compatibility.
-- Template-based Java is acceptable for V1. User-defined methods and recursion are required within a documented subset.
+- Starter templates remain acceptable for V1, but they must not define permanent algorithm-specific tracing eligibility. User-defined methods and recursion remain required within documented coverage.
 - Each Step click advances one observable operation and highlights its source expression. Several clicks may remain on the same source line.
 - Tree support focuses on binary-search-tree sort, including construction and traversal. Heap support focuses on heap sort, including comparisons, swaps, and sift operations, with synchronized array and tree views.
 - Use Docker Desktop with the WSL2 backend and Linux runner containers for Windows-local execution. Verify host prerequisites during setup and isolation during the prototype. Docker installation is not evidence that isolation requirements have been met.
@@ -363,7 +366,9 @@ Multiple programming languages, AI-generated explanations, collaboration, authen
 
 AI may assist development, but runtime visualization must be driven by verified execution data rather than an LLM guessing what the program does.
 
-## 16. First prompt to use in Codex VS Code
+## 16. Historical initial setup prompt
+
+The prompt below records repository initialization. It is not the current task or permission to restart Milestone 0. Resume from [current-state.md](../memory/current-state.md) and the user's approved scope.
 
 ```text
 Read requirements/PROJECT_REQUIREMENTS.md and inspect this repository and any existing

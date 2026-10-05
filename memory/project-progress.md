@@ -1,5 +1,13 @@
 # Project progress and development record
 
+## Documentation alignment - 2026-10-05
+
+User merged PR #11; fetch confirmed main 4f77bba. Approved documentation cleanup on docs/requirements-alignment before any new implementation. Corrected template wording and recorded-playback status, adopted-direction versus implementation status, obsolete parser/setup and future-collector statements, and stale analysis-guide next steps. Added root navigation and specs/documentation-alignment-review.md. Role definitions and narrow historical experiment semantics remain valid and unchanged.
+
+Replaced the 715-line current-state.md with a concise active checkpoint. Preserved its exact prior bytes as memory/current-state-history-20261005.md; this progress file remains the chronological record. The next proposed task is still separately approved composable analysis, not sorting-specific draft-5. No code, schema, dependency, limit or product scope changed.
+
+Checks passed: 62 Markdown files, 518 local links, balanced fences, Git whitespace and archive blob equality against main (1b715637aed2ad37ff8c43692350b90706253840). All changed files are Markdown. No Java, Docker or browser tests ran. Publication is pending; complete checks, commit/push/open this documentation PR, then record its commit/link in both active memory files. Do not start implementation or merge automatically.
+
 ## Composable Java tracing review - 2026-10-05
 
 Recovered the October 4 uncommitted documentation task on docs/composable-java-tracing. PR #10 is merged; origin/main remains c649980. The user clarified that differently written supported Java should be visualizable without an algorithm-specific template, then approved the review and its continuation. No product-code changes or new tests were lost; the design files were intact, but the previous memory entry still pointed to the old draft-5 next step.

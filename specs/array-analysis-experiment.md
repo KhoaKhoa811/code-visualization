@@ -1,6 +1,6 @@
 # Bounded array analysis experiment
 
-Approved scope: Maven/parser setup and analysis-only verification in Docker, 2026-09-22. Automatic instrumentation is a later task.
+Historical experiment scope: Maven/parser setup and analysis-only verification in Docker, 2026-09-22. Bounded automatic instrumentation was subsequently implemented; see the [analysis guide](../runner/analysis/README.md). The exact shape below remains this legacy experiment's contract, not the general authoring policy or next development task. Future coverage follows [composable tracing](composable-java-tracing.md).
 
 ## Input and eligibility
 

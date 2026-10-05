@@ -22,6 +22,7 @@
 
 - Keep `frontend/` responsible for editing, playback state, and renderers; `backend/` for APIs and run orchestration; `runner/` for isolated compilation, execution, and trace production; and `contracts/` for machine-readable API and trace schemas.
 - Separate source analysis and instrumentation from execution management, trace production, state reconstruction, and rendering. Use explicit, testable contracts between these responsibilities.
+- Build new tracing coverage from supported Java statements/expressions and verified contexts, not algorithm names or exact whole-program templates. Algorithms are acceptance cases. Preserve legacy probes until a separately approved replacement is verified; follow the composable tracing direction in `specs/composable-java-tracing.md`.
 - Prefer small composed modules and existing extension points. A new supported structure should normally add an adapter, renderer, and tests; document any necessary tracing or language-support changes.
 - Keep runtime facts independent from presentation. Trace events must not contain screen coordinates, colors, animation timing, or React component names.
 - Define or update contracts before incompatible producer/consumer changes. Deliberately version incompatible trace changes.

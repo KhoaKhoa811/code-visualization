@@ -1,6 +1,6 @@
 # ADR 0011: Build tracing by Java construct, not algorithm template
 
-Status: proposed, 2026-10-04. The user requested differently written code be handled generally and approved a design review after PR #10 merged. Detailed implementation remains subject to confirmation.
+Status: direction adopted through merged PR #11, 2026-10-05. The user requested differently written supported code be handled without algorithm templates. Detailed capability, contract and implementation increments remain subject to separate confirmation; no new runtime behavior is delivered by this ADR.
 
 Current probes validate exact statement sequences. They established execution, capture and replay correctness but would require accumulating recognizers for equivalent programs. The intended product needs reusable Java statement/expression support within explicit tracing coverage, independent of algorithm names.
 

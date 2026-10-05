@@ -4,9 +4,9 @@ Status: analysis-only setup approved and verified on 2026-09-22; bounded automat
 
 ## Decision and rationale
 
-Use JavaParser with JavaSymbolSolver as the first candidate for the bounded automatic array-analysis/instrumentation experiment. JavaParser provides AST construction and manipulation; JavaSymbolSolver provides declaration/type resolution. This fits the agreed separation between original-source analysis and instrumentation of a separate representation. JavaParser 3.28.2 is the researched dependency candidate; verify and pin the artifact and its dependencies during approved setup. Configure the Java 21 language level explicitly.
+Use JavaParser with JavaSymbolSolver for the bounded automatic array-analysis/instrumentation prototype. JavaParser provides AST construction and manipulation; JavaSymbolSolver provides declaration/type resolution. This preserves the separation between original-source analysis and instrumentation of a separate representation. Approved setup pinned JavaParser/SymbolSolver 3.28.2 and dependencies, configured Java 21, and verified the bounded cases. No dependency reselection or installation is required merely to resume work.
 
-The recommendation is based on official documentation, not comparative benchmarks or demonstrated compatibility with this project. Eclipse JDT offers binding resolution and ASTRewrite without modifying the original AST. JDK compiler APIs offer parsing and semantic analysis but need a separately designed rewriting layer. Revisit those alternatives if the candidate fails acceptance checks; do not build parallel engines without a concrete need.
+The initial recommendation used official documentation rather than comparative benchmarks. Subsequent project checks established bounded compatibility, not arbitrary-Java correctness. Eclipse JDT and JDK compiler APIs remain alternatives only if evidence shows the current parser cannot meet an approved capability. Do not build parallel engines without a concrete need.
 
 ## Boundaries and verification gate
 
