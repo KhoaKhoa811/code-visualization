@@ -1,4 +1,6 @@
 $ErrorActionPreference = 'Stop'
+& node (Join-Path $PSScriptRoot 'recording/test-replay.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Replay adapter compatibility checks failed' }
 $buildDir = Join-Path $PSScriptRoot '.build'
 New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 # Compile ONLY trusted driver/test files on the host. Fixture Main.java files stay in Docker.

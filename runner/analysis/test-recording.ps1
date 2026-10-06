@@ -1,6 +1,8 @@
 $ErrorActionPreference = 'Stop'
 & node (Join-Path $PSScriptRoot '../../contracts/validate.mjs') --self-test
 if ($LASTEXITCODE -ne 0) { throw 'Trace contract self-tests failed' }
+& node (Join-Path $PSScriptRoot '../prototype/recording/test-replay.mjs')
+if ($LASTEXITCODE -ne 0) { throw 'Replay adapter compatibility checks failed' }
 # This generates fresh fixtures in the bounded worker; no stale artifact fallback.
 $fixtures = Join-Path $PSScriptRoot ('.results/fixtures-' + [Guid]::NewGuid().ToString('N'))
 & (Join-Path $PSScriptRoot 'test.ps1') -FixtureDirectory $fixtures

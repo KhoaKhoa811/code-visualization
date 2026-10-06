@@ -16,14 +16,19 @@
 - User-defined methods and recursion are required in V1. Specify frame and return semantics early and implement them before tree/heap sorting.
 - One Step click advances one observable operation with synchronized source-expression highlighting and visualization. Multiple clicks may remain on one line.
 - Keep work scoped to the active milestone and its acceptance cases. Milestones are increments; do not silently remove later V1 requirements.
+- The 2026-10-06 clarification places all discussed product features in V1, including broader array/string/map/set/tree/heap coverage, separate test inputs, structure discovery/mappings, object-graph fallback, grid panels and evidence-based view rankings. Earlier V2 deferrals for these features are superseded. Deliver in approved increments without treating unfinished implementation as optional scope.
 - Keep the current milestone in `memory/current-state.md` once that file exists. Until then, the starting scope is Milestone 0: specifications and repository instructions, not application implementation.
 
 ## Architecture and extensibility
 
 - Keep `frontend/` responsible for editing, playback state, and renderers; `backend/` for APIs and run orchestration; `runner/` for isolated compilation, execution, and trace production; and `contracts/` for machine-readable API and trace schemas.
 - Separate source analysis and instrumentation from execution management, trace production, state reconstruction, and rendering. Use explicit, testable contracts between these responsibilities.
+- Build new tracing coverage from supported Java statements/expressions and verified contexts, not algorithm names or exact whole-program templates. Algorithms are acceptance cases. Preserve legacy probes until a separately approved replacement is verified; follow the composable tracing direction in `specs/composable-java-tracing.md`.
 - Prefer small composed modules and existing extension points. A new supported structure should normally add an adapter, renderer, and tests; document any necessary tracing or language-support changes.
 - Keep runtime facts independent from presentation. Trace events must not contain screen coordinates, colors, animation timing, or React component names.
+- Automatically show reliable supported structures; suggest and confirm ambiguous custom mappings. Use bounded graphs of captured objects/references when meaning is unclear, never as a substitute for missing trace facts. Preserve aliases, cycles, nulls and shared identities across synchronized grid views.
+- Keep mappings, candidate rankings and layout separate from raw traces. Revalidate mappings against source/type/declaration changes and run identity. Heap projections require confirmed indexing and captured active boundaries; recursion requires distinct recorded frames. Do not infer JDK-private structure layouts.
+- Rank suggested views with evidence-based Strong/Possible/Weak and explicit insufficient/incompatible states. Separate capture coverage, representation fit, user confirmation, invariants and algorithm correctness. No invented probabilities or correctness scores; backward playback must restore assessments from the same accepted prefix and rule version.
 - Define or update contracts before incompatible producer/consumer changes. Deliberately version incompatible trace changes.
 - Avoid speculative abstraction, microservices, brokers, databases, authentication, streaming, and other deferred features without a current requirement.
 - Extensibility means preserving useful boundaries and verified behavior; it does not promise arbitrary Java support or eliminate every future refactor.
@@ -51,6 +56,7 @@
 
 - Add meaningful tests for semantic transformations, trace contracts, intermediate replay states, adapters, and runner isolation. Compare original and instrumented supported programs for final values, output, exceptions, and side-effect counts.
 - Include browser verification for sorting playback when the frontend exists. Check source edits, backward steps, failures, limits, and cleanup against relevant acceptance cases.
+- Verify the requirements' grid/mapping/confidence acceptance cases as those capabilities are implemented: common cursor, shared identities, mapping invalidation, bounded factual graph fallback, ambiguity, ranking evidence and no future-event leakage. Keep required-but-unimplemented features clearly labeled; do not claim V1 completion from narrow prototype gates.
 - Run checks appropriate to the change. For documentation-only work, check consistency and paths; do not invent application test results.
 - Pin compatible build/runtime versions during setup and document reproducible Windows/PowerShell and runner commands. Until tools and build files exist, do not claim build commands are verified.
 - Update concise progress notes after verified work. Report what changed, what was checked, and remaining limitations. Never mark incomplete milestones or unrun tests as complete.

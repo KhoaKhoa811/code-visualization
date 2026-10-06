@@ -1,6 +1,6 @@
 # Review: tracing supported Java constructs
 
-Status: design review/proposal, 2026-10-04, after merged PR #10. The user clarified that differently written Java should be visualizable without recognizing a named algorithm, and approved this documentation review. No analyzer, transformer, schema, limit or runtime change is implemented here. Detailed capability and contract changes require separate approval.
+Status: direction adopted through merged PR #11, confirmed during the 2026-10-05 documentation review. The user wants differently written supported Java visualized without recognizing a named algorithm. The implementation increments and contract choices below remain proposals requiring separate approval. No composable analyzer, transformer, schema or limit change is implemented by this review.
 
 ## Conclusion
 

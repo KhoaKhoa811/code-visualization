@@ -1,5 +1,23 @@
 # Project progress and development record
 
+## Whole-repository cleanup extension - 2026-10-05
+
+User expanded the open PR #12 cleanup to every file, including runner code. Applied safe-refactor with pre/post verification. Inventoried all 175 tracked files at 424319e and recorded individual keep/refactor/remove decisions in specs/repository-file-review.md. Active Java source, schema versions, fixtures, manual baselines and documented Docker diagnostic remain useful; no obsolete application module was confirmed.
+
+Extracted common validated-prefix mutation/retirement reconstruction into runner/prototype/recording/replay-state.mjs. Kept loop-replay.mjs and conditional-replay.mjs as adapters with unchanged error messages and output shapes, including omitted versus null read details. Added test-replay.mjs and wired it into both PowerShell gates. Removed runner/analysis/.gitignore and runner/prototype/.gitignore because root patterns cover all entries; before/after ignore checks passed. Ignored caches/results are retained, not shipped.
+
+Pre/post contract self-tests and 178 captured-result/source/hash/replay checks passed (30 conditional, 68 loop, 80 read-loop), with all forward/backward prefixes. Adapter checks passed against old/new implementations; PowerShell syntax passed. The initial sandboxed baseline could not spawn Node (EPERM); elevated baseline and postchecks passed. Existing October 4 captures were reused; no Java/Docker/browser run or new language coverage is claimed. Shared runtime Java, schemas, recorder templates and limits are unchanged.
+
+Final checks passed: 63 Markdown files/695 local links, fences/whitespace, and unchanged Java/schema/fixture/recorder/build-pin/Dockerfile bytes against 424319e. Publication: runner cleanup commit 81974f0 pushed; PR #12 title/body updated to include the repository review and verified replay refactor. The approved cleanup is complete; final handoff notes follow on the same branch. Keep the composable analyzer as the next separately approved task; do not implement it or merge automatically.
+
+## Documentation alignment - 2026-10-05
+
+User merged PR #11; fetch confirmed main 4f77bba. Approved documentation cleanup on docs/requirements-alignment before any new implementation. Corrected template wording and recorded-playback status, adopted-direction versus implementation status, obsolete parser/setup and future-collector statements, and stale analysis-guide next steps. Added root navigation and specs/documentation-alignment-review.md. Role definitions and narrow historical experiment semantics remain valid and unchanged.
+
+Replaced the 715-line current-state.md with a concise active checkpoint. Preserved its exact prior bytes as memory/current-state-history-20261005.md; this progress file remains the chronological record. The next proposed task is still separately approved composable analysis, not sorting-specific draft-5. No code, schema, dependency, limit or product scope changed.
+
+Checks passed: 62 Markdown files, 518 local links, balanced fences, Git whitespace and archive blob equality against main (1b715637aed2ad37ff8c43692350b90706253840). All changed files are Markdown. No Java, Docker or browser tests ran. Publication: cleanup commit 6db0b85 pushed; [PR #12](https://github.com/KhoaKhoa811/code-visualization/pull/12) is open against main. The approved cleanup is complete; final publication notes follow on the same branch. Do not start implementation or merge automatically.
+
 ## Composable Java tracing review - 2026-10-05
 
 Recovered the October 4 uncommitted documentation task on docs/composable-java-tracing. PR #10 is merged; origin/main remains c649980. The user clarified that differently written supported Java should be visualizable without an algorithm-specific template, then approved the review and its continuation. No product-code changes or new tests were lost; the design files were intact, but the previous memory entry still pointed to the old draft-5 next step.

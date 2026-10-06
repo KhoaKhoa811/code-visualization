@@ -1,5 +1,7 @@
 # Controlled array recorder
 
+Maintenance update, 2026-10-05: loop and conditional replay now share `replay-state.mjs` for validated-prefix reconstruction. Their public adapters retain version-specific selected details and output shapes. Run `node runner/prototype/recording/test-replay.mjs` from the repository root for compatibility checks; both PowerShell gates also run it. The [file review](../../../specs/repository-file-review.md) records retained components and verification. This adds no Java tracing coverage.
+
 This experiment produces real ARRAY_DECLARE, ARRAY_READ and ARRAY_WRITE records from manually instrumented Java inside Docker. It does not parse or transform arbitrary Java. The original records [3,1], an unchanged array after reading index 1, then [1,1] after writing index 0.
 
 ## Files and responsibilities
