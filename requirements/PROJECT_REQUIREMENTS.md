@@ -12,17 +12,19 @@ The audience includes Java beginners and algorithm students. The primary learnin
 
 ## 2. Requirement status
 
-- **Confirmed:** Java-only V1; TypeScript, React, Vite, TanStack Query, Axios, and TanStack Router frontend; Java, Spring Boot, and Maven backend; Docker execution; code visualization, variables, arrays, lists, stacks, queues, maps, trees, heaps, and extensibility.
+- **Confirmed:** Java-only V1; TypeScript, React, Vite, TanStack Query, Axios, and TanStack Router frontend; Java, Spring Boot, and Maven backend; Docker execution; code visualization, variables, arrays, strings, lists, stacks, queues, maps, sets, trees, heaps, methods/recursion, and extensibility.
 - **Confirmed playback behavior:** recorded diagram playback after execution terminates, using available validated facts.
 - **Implementation baseline:** Monaco remains proposed; bounded source instrumentation and JavaParser/SymbolSolver are verified in the prototype. This does not establish general Java tracing or application integration.
 - **Needs technical validation:** composable language coverage, broader instrumentation, library operation coverage, and tree/heap representation.
 
 ### Confirmed clarification decisions
 
+- Latest scope clarification, 2026-10-06: all discussed product features belong to V1. This includes broader array/string/map/set/tree/heap coverage, separate test inputs, automatic structure discovery, confirmed custom mappings, object-graph fallback, synchronized grid panels and evidence-based suggested-view rankings. Earlier V2 deferrals for these features are superseded. Deliver incrementally; V1 is not complete until the agreed coverage and workflows are verified. Exact supported operations and limits still require specification; this is not arbitrary-Java support or a claim of implementation.
+
 - On 2026-10-04/05, the user clarified that differently written supported Java must not depend on recognizing an exact algorithm template, and merged the [composable tracing review](../specs/composable-java-tracing.md) in PR #11. Build coverage around statements, expressions and verified combinations; use bubble sort, quicksort and other programs as acceptance examples. This does not promise arbitrary Java or immediate quicksort support. Detailed implementation still requires approval.
 
-- On 2026-09-22, the user confirmed finishing the existing V1 scope before implementing V2. V2 broadens visualization for Java solutions to array, string, map, set, tree, and heap problems, including the coverage gaps identified in the requirements review. Existing V1 array/string/collection requirements, tree sort, heap sort, methods/recursion, and live Scanner input remain unchanged. See Section 15 for the V2 roadmap; exact operations and acceptance cases require specification before implementation.
-- Both V1 and V2 retain Main.java with Main.main. A separate test-input workflow is a V2 feature and still runs Main.java; this does not select a solution-class invocation model. V1 interactive Scanner input remains required. Input format, case management, and delivery semantics for V2 remain to be designed.
+- The September 22 split between V1 and broader V2 structure coverage is historical. Section 15 now lists that coverage as V1 work, following the latest scope clarification.
+- V1 retains Main.java with Main.main for both live Scanner input and a separate test-input workflow. Define input format, case management and delivery semantics before implementation; do not change to a solution-class invocation model or resubmit input during replay.
 
 - On 2026-09-18, the user confirmed ordinary single-file Java authoring with imports, a class, static main, helper methods, and common standard-library calls. Java 21 compilation/runtime determines language behavior. Tracing coverage is separate: valid code beyond that coverage may execute in isolation and show output with a clear visualization limitation. Playback stops before missing facts could make state misleading. Existing execution restrictions and later V1 visualization requirements remain. See [ADR 0002](../specs/decisions/0002-java-execution-and-visualization-coverage.md); this supersedes blanket rejection solely for unsupported tracing.
 
@@ -117,7 +119,11 @@ Use JDK 21 for the backend and runner, with Java release target 21. This does no
 | Stack | Vertical elements with top marker | Push, pop, peek, and empty state |
 | Queue | Sequence with front/back markers | Enqueue, dequeue, peek, and empty state |
 | Map | Key–value entries | Put/update, get, remove, and documented ordering behavior |
-| Tree | Binary search tree nodes connected by edges | Tree-sort construction, node/link changes, comparisons, and traversal highlights |
+| Set | Logical elements without invented ordering | Supported add/remove/contains and empty state |
+| String | Recorded text or indexed character view | Supported operations and source highlights |
+| Object graph | Captured objects, fields and reference edges | Factual fallback with identity, aliases, nulls, cycles and explicit missing data |
+| Call stack | Recorded invocation frames | Arguments, locals, returns and distinct recursive lifetimes |
+| Tree | Supported custom tree nodes connected by captured edges | Tree sort and agreed broader tree operations, node/link changes, comparisons and traversal highlights |
 | Heap | Synchronized tree and array views | Heap-sort construction, extraction, comparisons, swaps, and sift operations captured from user code |
 
 Detection must rely on resolved supported types and explicit conventions. Do not assume arbitrary objects are recognizable data structures.
@@ -127,6 +133,44 @@ Detection must rely on resolved supported types and explicit conventions. Do not
 - For a heap, distinguish logical priority-queue operations from actual internal heap layout. Do not invent a layout from unspecified iteration order.
 - Clearly label logical views; do not imply they display Java implementation internals unless those internals are actually captured.
 - Render nulls, empty structures, repeated values, and shared references correctly. Handle cycles safely in object traversal.
+
+### 6.1 Automatic discovery and confirmed interpretations
+
+Automatically display reliable supported representations from resolved types, supported operations and actual recorded state. Do not identify an algorithm name to decide how to trace it. Bubble sort, quicksort, heap sort and other algorithms are acceptance programs for composable Java capabilities, not separate template engines.
+
+For ambiguous library usage or custom classes, suggest a compatible view and let the user confirm or correct it. Examples include Deque used as a stack or queue, custom node fields, and an array used as a heap. Confirmation chooses a presentation; it cannot invent runtime facts or prove algorithm correctness.
+
+Support mappings for list value/link/head fields, tree value/child/root fields, custom stack top/storage and queue front/rear/storage conventions, including supported circular layouts. For an array-backed heap, identify the same array object, indexing convention and recorded active boundary; synchronize the array and tree projections and sorted suffix. Do not infer PriorityQueue's internal layout from iteration order.
+
+Reuse mappings while compatible. Revalidate relevant types, fields, declarations and anchors after source changes or a new run; ask again when changes invalidate the mapping. Never reuse runtime object IDs across runs. Old traces retain their own source/mapping association. A mapped boundary must come from captured bindings or an explicitly supported expression over available recorded facts, never executing user code during replay. Exact persistence storage and mapping-expression coverage remain design work.
+
+### 6.2 Factual object-graph fallback
+
+When custom objects are captured but their structure is unclear, show boxes for objects, captured values/fields and arrows for actual references. Preserve object identity, aliases, nulls, cycles and shared children. Missing fields are unknown, not null. Bound traversal and clearly mark omitted data; never unfold cycles into an invented tree or silently discard conflicting edges.
+
+This fallback resolves uncertainty about interpretation, not missing tracing support. If execution facts are unavailable or unsafe, show the coverage limitation and respect the safe playback boundary. Do not call getters, toString, user callbacks or arbitrary reflection to guess values. Supported allocation, field/reference mutation and object lifetime capture must be specified and implemented before enabling this view.
+
+### 6.3 Grid of synchronized views
+
+Within the left visualization area, use a grid of separate panels for the established structures and selected views present at the current step. The Java editor stays upper right and the live console lower right. All panels and source highlighting share one playback cursor; forward/backward/restart never reruns Java.
+
+Show all reliably established relevant structures, not every hypothetical interpretation. Ambiguous objects use a graph plus suggestions until specialized mappings are confirmed. Allow multiple valid views of the same object, especially array and heap, without duplicating logical object identity. Group related objects/scalars by roots or frames rather than requiring a panel per field. Apply bounded rendering with visible truncation/scrolling as needed.
+
+Dragging changes layout only. Rankings must not silently switch the user's selected view while stepping. Exact grid sizing, grouping controls and layout persistence remain UI design choices. Recursion has a call-stack panel based on recorded invocation IDs, arguments, locals and returns; same-named locals in different frames remain distinct while shared objects remain shared.
+
+### 6.4 Suggested-view statistics and confidence
+
+Rank applicable visualizations by evidence of representation fit, using Strong / Possible / Weak initially. Show the evidence, missing facts and contradictions behind each suggestion. If facts are insufficient or incompatible, say so rather than inventing a probability. Do not display uncalibrated percentages such as "92% correct" or an algorithm-correctness score.
+
+Multiple views may fit; allow ties and simultaneous views. User confirmation is separate from measured evidence and does not automatically strengthen confidence. Separate capture coverage, view compatibility, data-structure invariant observations and algorithm correctness. A heap under construction may violate heap order while still being a valid heap projection; a conflicting tree edge must remain visible as a mismatch or in the graph fallback.
+
+Assessment rules must be deterministic and versioned, tied to the selected run/source, mapping and accepted trace prefix. Rewinding restores the same assessment without using later events. Any evidence counts must state what captured subset they count. Define and test exact rules before implementing them; no guessed runtime facts or algorithm detection by an LLM is required.
+
+### 6.5 V1 coverage and implementation status
+
+V1 includes strings, sets, broader array/map/tree/heap problem coverage and priority-queue logical views in addition to the table above. Specify concrete operations/types and representative differently written programs before each implementation increment. General object graphs do not imply support for every possible graph algorithm. Methods and recursion, live input, separate test inputs, mappings, grid views and confidence suggestions are V1 completion requirements, not optional V2 additions.
+
+These requirements describe the target system. The current prototype supports bounded scalar/array/loop/conditional traces only; it does not implement general structure discovery, custom-object capture, mapping controls, rankings or the frontend grid. Preserve verified code while extending its capabilities.
 
 ## 7. Meaning of a visualization step
 
@@ -291,23 +335,23 @@ Prove scalar declarations/assignments, arrays, conditions, loops, comparisons, a
 
 ### Milestone 2 — End-to-end editor and playback
 
-Integrate Monaco, Spring Boot run API, worker, recorded trace, state reducer, and variable/array renderers. Deliver synchronized source highlighting, playback controls, console/errors, and limit handling.
+Integrate Monaco, Spring Boot run API, worker, recorded trace, state reducer, and variable/array renderers. Deliver synchronized source highlighting, playback controls, console/errors, limit handling and the grid foundations for simultaneous views.
 
-Include live console output and supported `Scanner` input, waiting/cancellation/EOF handling, and draggable diagram layouts. Prove an interactive worker round trip before UI integration; diagram playback still starts only after termination.
+Include live console output and supported `Scanner` input, a separate test-input workflow, waiting/cancellation/EOF handling, and draggable diagram layouts. Prove an interactive worker round trip before UI integration; diagram playback still starts only after termination.
 
 Verify variables and arrays before expanding to other structures. Then add and verify supported user-defined methods and recursion, including call-frame playback, before Milestone 4.
 
 ### Milestone 3 — Collection visualization
 
-Add documented list, stack, queue, and map adapters, operations, renderers, and acceptance cases. Support explicit stack/queue view selection where needed.
+Add documented list, stack, queue, map and set adapters, broader string/array operations, renderers and acceptance cases. Deliver grid panels, supported custom-object graph fallback, confirmed mappings and evidence-based suggestions as their capture capabilities become available. Support explicit stack/queue view selection where needed.
 
 ### Milestone 4 — Tree and heap visualization
 
-Implement binary-search-tree sort using the agreed node template and heap sort using an array-backed heap convention. Show tree construction and traversal, and heap comparisons, swaps, and sift operations. Synchronize heap array/tree views, including the active heap boundary and sorted suffix. Capture algorithm steps from executed user code; do not infer library internals. Other tree/heap algorithms are future extensions.
+Implement binary-search-tree sort through supported node-field mappings and heap sort through a confirmed array-backed heap convention. Show tree construction/traversal and heap comparisons, writes and sift operations from executed code. Synchronize heap array/tree views, active boundary and sorted suffix. Extend to the agreed broader tree/heap problem and logical priority-queue coverage within V1; specify exact operations rather than assuming arbitrary library internals.
 
 ### Milestone 5 — V1 completion
 
-Verify the full V1 support matrix, cross-module tests, failure states, resource cleanup, and development instructions. Update documentation and known limitations. V1 completion requires all V1 structure categories within their documented supported scope; the V2 roadmap below does not expand this completion gate.
+Verify the full V1 support matrix, cross-module tests, failure states, resource cleanup and development instructions. Include all confirmed structure families, methods/recursion, live and separate test inputs, grid views, custom mappings, graph fallback and evidence-based rankings. Milestones are delivery increments, not reasons to defer these requirements to V2. Exact operation coverage and acceptance cases must be agreed and verified before declaring completion.
 
 ## 14. Acceptance cases
 
@@ -325,7 +369,7 @@ Verify the full V1 support matrix, cross-module tests, failure states, resource 
 | AC-10 | Array out-of-bounds or other supported runtime error | Correct partial trace and error location; no false successful write |
 | AC-11 | Infinite loop/excessive output/oversized trace | Enforced limit, explicit terminal status, worker cleanup |
 | AC-12 | Supported list/stack/queue/map operations | Correct contents, markers, operation ordering, and empty states |
-| AC-13 | Binary-search-tree sort with supported node template | Correct construction, edges, traversal highlights, and sorted output without duplicating shared nodes |
+| AC-13 | Binary-search-tree sort with confirmed supported node mapping | Correct construction, edges, traversal highlights, and sorted output without duplicating shared nodes |
 | AC-14 | User-written heap sort | Recorded comparisons, swaps, and sift operations; synchronized array/tree views, active heap boundary, and correct sorted output |
 | AC-15 | Edit source after execution | Old trace remains tied to original source or is clearly invalidated |
 | AC-16 | Supported method calls and recursion | Correct arguments, return values, distinct frames, scope lifetimes, and backward playback across calls; explicit depth-limit outcome |
@@ -338,27 +382,41 @@ Verify the full V1 support matrix, cross-module tests, failure states, resource 
 | AC-23 | Drag arrays and individual list/tree/heap nodes | Arrays move as groups; individual nodes move visually without changing logical order, values, relationships, or heap index mapping |
 | AC-24 | Valid admitted single-file Java exceeds tracing coverage | Execute the original program once in isolation; show output and a clear visualization-unavailable diagnostic; distinguish execution success from visualization completeness |
 | AC-25 | Missing recording could invalidate later diagram state | Stop playback at the last safe recorded boundary, explain incomplete capture, and do not guess later values, automatically rerun the program, or resubmit input |
+| AC-26 | Program contains several captured structures and recursive frames | Relevant grid panels follow the same cursor/source highlight; aliases share identities and frame-local bindings stay distinct |
+| AC-27 | Custom nodes use nonstandard field names | Suggest and confirm field/root mappings; recorded link changes update the chosen view without requiring an algorithm template |
+| AC-28 | Structure meaning is unclear but objects/references are captured | Factual bounded object graph shows values, nulls, aliases and cycles; no fabricated specialized structure |
+| AC-29 | Capture is missing or traversal is truncated | Explain unavailable/partial data and safe boundaries; graph fallback does not invent unknown facts |
+| AC-30 | Confirm a mapping, then rename/remove a field or change its type | Revalidate and require correction when incompatible; old traces remain tied to their source/mapping revision |
+| AC-31 | Array is also used as a heap | Both panels reference the same array; use confirmed indexing and captured boundary; no guessed sorted suffix or PriorityQueue layout |
+| AC-32 | Several candidate views fit | Evidence-based Strong/Possible/Weak ranking with ties/reasons; explicit unknown/incompatible states; confirmation does not certify correctness |
+| AC-33 | Replay backward while suggestions or invariants change | Same facts/mapping/rule version restore the same assessment; no future-event leakage or automatic renderer switching |
+| AC-34 | Heap order temporarily fails, or a tree projection has conflicting links | Preserve actual state; distinguish invariant observations from view fit and algorithm correctness; never hide real edges to repair the diagram |
+| AC-35 | Provide test inputs separately from Main.java | Associate each input/run/source and result correctly; preserve actual Java input semantics and replay without resubmission |
+| AC-36 | Broader string/set/array/map/tree/heap problems, including differently written sorts | Agreed operations work through shared Java capabilities and adapters; no exact algorithm-template dependency; library internals remain factual |
 
 For instrumentation tests, compare original and instrumented execution for supported programs, including final values, output, exception behavior, and side-effect counts. Test the reducer against expected intermediate states, not only final state. Include a browser-level test of the sorting example and meaningful worker-limit/isolation checks.
 
-## 15. Deferred features
+## 15. V1 coverage and remaining deferred features
 
-### Confirmed V2 roadmap
+### Previously deferred coverage now required in V1
 
-Complete V1 before implementing V2. The confirmed V2 direction is broader visualization of Java solutions to algorithm problems while retaining ordinary Main.java/Main.main authoring. This is a roadmap commitment, not a promise to visualize every Java program or every library implementation.
+The latest user instruction supersedes the former V2 roadmap for all discussed product features. V1 retains ordinary Main.java/Main.main authoring and includes these capabilities, within explicit, verified operation coverage:
 
-| V2 area | Expansion beyond existing V1 scope |
+| V1 area | Required scope to specify and verify |
 | --- | --- |
-| Arrays | Broader array-problem coverage and representations beyond the initial one-dimensional subset; select exact types and matrix cases during V2 specification |
-| Strings | Broader string-problem operations and suitable character/string visualizations; specify required methods and representations |
-| Maps and sets | Broader map-problem coverage plus set visualization, including a defined Set/HashSet subset |
-| Trees | General tree-problem coverage beyond binary-search-tree sort, with defined node conventions and operations |
-| Heaps | General heap/priority-queue problem coverage beyond heap sort, including a defined PriorityQueue subset; never infer implementation layout from iteration order |
-| Separate test inputs | Provide test inputs separately from source while still executing Main.java/Main.main; define format, delivery, and case handling before implementation |
+| Arrays | Broader array-problem coverage beyond the first one-dimensional prototype; agree exact representations/types and matrix cases |
+| Strings | Supported string-problem operations and suitable character/string views |
+| Maps and sets | Broader map operations and set visualization, including an agreed Set/HashSet subset |
+| Trees | General tree-problem coverage beyond tree sort, with custom mappings and documented node operations |
+| Heaps | Heap-sort projections and broader heap/priority-queue problem coverage; logical library views never invent internal layout |
+| Methods and recursion | Recorded calls, arguments, returns, frames, shared references and bounded recursion |
+| Input workflows | Live Scanner input and separate test inputs while retaining Main.java/Main.main |
+| Structure interpretation | Reliable automatic discovery, confirmed custom mappings, factual object graphs and synchronized grid panels |
+| Suggested-view statistics | Evidence-based confidence, reasons, ties and missing-fact states, separate from algorithm correctness |
 
-Design V1 with explicit boundaries between analysis, instrumentation, recording, execution/input handling, trace reconstruction, and rendering. Add capabilities through focused operations/adapters/renderers and tests where possible. Avoid hard-coding a particular sample or sorting algorithm into shared contracts. Preserve verified V1 behavior, version incompatible contracts deliberately, and keep test-input handling separate from source transformation. Extensibility does not justify implementing V2 early or promise that no future refactoring will be needed.
+Specify exact library methods, algorithm examples, types, bounds and acceptance cases before implementation. Supporting a family does not promise every Java construct or internal library representation. Missing implementations remain V1 work; do not relabel them V2 to claim completion.
 
-These additions do not defer existing V1 features, including basic String support, maps, user-defined methods/recursion, live Scanner input, tree sort, or heap sort. Exact V2 library methods, algorithm examples, data types, and acceptance cases remain design work.
+Preserve analysis, instrumentation, isolated execution/input handling, trace reconstruction, interpretation and rendering boundaries. Algorithms remain acceptance cases rather than specialized engines. Preserve existing verified behavior, deliberately version incompatible contracts and keep input handling separate from transformation. Extensibility permits necessary verified refactors.
 
 ### Other deferred features
 
